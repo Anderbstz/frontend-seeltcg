@@ -165,17 +165,25 @@ const ChatBubble = () => {
               value={message}
               placeholder="Escribe tu mensaje..."
               onChange={(e) => setMessage(e.target.value)}
+              maxLength={70}
               disabled={!isAuthenticated()}
               className="flex-1 px-4 py-2.5 border border-[#e2e8f0] rounded-[20px] text-sm outline-none focus:border-blue-500"
             />
-            <button
+            <div className="flex flex-col items-center gap-1 ml-2.5">
+              {message.length > 55 && (
+                <span className={`text-xs font-semibold ${message.length >= 70 ? 'text-red-500' : 'text-gray-400'}`}>
+                  {70 - message.length}
+                </span>
+              )}
+              <button
               type="submit"
               disabled={!message.trim() || !isAuthenticated()}
-              className="w-10 h-10 rounded-full border-none ml-2.5 flex items-center justify-center cursor-pointer transition-all duration-200 disabled:bg-[#e2e8f0] disabled:cursor-not-allowed disabled:shadow-none text-white"
+              className="w-10 h-10 rounded-full border-none flex items-center justify-center cursor-pointer transition-all duration-200 disabled:bg-[#e2e8f0] disabled:cursor-not-allowed disabled:shadow-none text-white"
               style={message.trim() && isAuthenticated() ? { background: 'linear-gradient(135deg, #FF6B35, #FF9E1F)', boxShadow: '0 2px 4px rgba(255, 107, 53, 0.3)' } : { background: '#e2e8f0' }}
             >
               <FiSend />
             </button>
+            </div>
           </form>
 
           {!isAuthenticated() && (

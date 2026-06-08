@@ -31,6 +31,7 @@ export default function Navbar() {
   const searchRef = useRef<HTMLDivElement>(null)
   const menuRef = useRef<HTMLDivElement>(null)
   const profileRef = useRef<HTMLDivElement>(null)
+  const loginDropdownRef = useRef<HTMLDivElement>(null)
   const debounceRef = useRef<ReturnType<typeof setTimeout> | undefined>(undefined)
 
   useEffect(() => {
@@ -99,7 +100,7 @@ export default function Navbar() {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) setMenuOpen(false)
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) setShowSearchPanel(false)
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) setShowProfilePanel(false)
-      setShowLoginDropdown(false)
+      if (loginDropdownRef.current && !loginDropdownRef.current.contains(event.target as Node)) setShowLoginDropdown(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -358,10 +359,14 @@ export default function Navbar() {
                     <FiUser size={26} />
                   </button>
                   {showLoginDropdown && (
-                    <div className="absolute z-30 right-0 top-full mt-2 bg-white border-[3px] border-black rounded-[20px] p-3 min-w-[180px] shadow-[10px_10px_0_#00000020] flex flex-col gap-1">
-                      <Link href="/login" className="w-full border-2 border-black rounded-xl px-3 py-2 bg-filter text-left font-semibold hover:bg-[#d83000] hover:text-white no-underline" onClick={() => setShowLoginDropdown(false)}>
+                    <div ref={loginDropdownRef} className="absolute z-30 right-0 top-full mt-2 bg-white border-[3px] border-black rounded-[20px] p-3 min-w-[180px] shadow-[10px_10px_0_#00000020] flex flex-col gap-1">
+                      <button
+                        type="button"
+                        className="w-full border-2 border-black rounded-xl px-3 py-2 bg-filter text-left font-semibold hover:bg-[#d83000] hover:text-white cursor-pointer"
+                        onClick={() => { setShowLoginDropdown(false); router.push('/login') }}
+                      >
                         Iniciar sesión
-                      </Link>
+                      </button>
                       <button
                         type="button"
                         className="w-full border-2 border-black rounded-xl px-3 py-2 bg-filter text-left font-semibold hover:bg-[#d83000] hover:text-white cursor-pointer"
