@@ -131,7 +131,7 @@ export default function Home() {
   return (
     <>
       <section className="grid gap-3 px-[5vw] py-3 md:grid-cols-[3fr_1fr]">
-        <div className="relative overflow-hidden rounded-[28px] border-4 border-black p-3 min-h-[460px]" style={{ background: '#fce3b8' }}>
+        <div className="relative overflow-hidden rounded-[28px] border-4 border-black p-3 min-h-[400px]" style={{ background: '#fce3b8' }}>
           {heroSlides.map((slide, index) => (
             <article
               key={slide.id}
@@ -141,7 +141,7 @@ export default function Home() {
             >
               <div>
                 <p className="text-xs uppercase tracking-wider m-0 text-accent">{slide.combo}</p>
-                <h1 className="m-2 text-[clamp(1.1rem,3vw,2.2rem)]" style={{ fontFamily: "'Press Start 2P', cursive" }}>{slide.title}</h1>
+                <h1 className="m-2 text-[clamp(0.9rem,3vw,2.2rem)]" style={{ fontFamily: "'Press Start 2P', cursive" }}>{slide.title}</h1>
                 <p className="text-base mb-4 text-muted">{slide.subtitle}</p>
                 <p className="text-sm my-2 mb-4 text-muted">
                   Incluye: {(slide.includes || []).join(', ')}.{' '}
