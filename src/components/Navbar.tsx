@@ -238,13 +238,7 @@ export default function Navbar() {
           )}
         </div>
 
-        {/* Mobile: search icon only — navigates to /search */}
-        <Link href="/search" className="md:hidden flex items-center justify-center w-[52px] h-[52px] rounded-full border-2 border-black bg-white">
-          <FiSearch size={26} />
-        </Link>
-
-        {/* Desktop: full search bar */}
-        <div className="hidden md:block w-full relative" ref={searchRef}>
+        <div className="w-full relative min-w-0" ref={searchRef}>
           <form onSubmit={handleSearchSubmit} className="flex border-[3px] border-black rounded-full overflow-hidden bg-white">
             <input
               type="search"
@@ -252,10 +246,10 @@ export default function Navbar() {
               value={searchTerm}
               onChange={handleSearchChange}
               onFocus={() => setShowSearchPanel(true)}
-              className="flex-1 border-none px-4 py-3 text-base bg-transparent"
+              className="flex-1 border-none px-4 py-3 text-base bg-transparent min-w-0 w-[120px] sm:w-full"
               style={{ fontFamily: "'Space Grotesk', sans-serif", outline: 'none' }}
             />
-            <button type="submit" className="flex items-center justify-center w-[52px] h-[52px] p-0 bg-transparent border-none cursor-pointer" aria-label="Buscar">
+            <button type="submit" className="flex items-center justify-center w-[52px] h-[52px] p-0 bg-transparent border-none cursor-pointer shrink-0" aria-label="Buscar">
               <FiSearch size={26} />
             </button>
           </form>
