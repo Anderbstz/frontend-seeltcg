@@ -1,0 +1,265 @@
+'use client'
+
+import { useState, useEffect, useCallback } from 'react'
+import Link from 'next/link'
+import Card from '@/components/Card'
+import { CARDS_URL, API_URL } from '@/lib/config'
+
+const heroSlides = [
+  {
+    id: 'slide-1',
+    title: 'Rayo Doble',
+    subtitle: 'Velocidad y presión Lightning',
+    combo: 'Zapdos + Wash Rotom',
+    priceLabel: 'S/ 31.90',
+    offerSlug: 'rayo-doble',
+    cards: ['xy6-23', 'pl2-RT5'],
+    images: ['https://images.pokemontcg.io/xy6/23.png', 'https://images.pokemontcg.io/pl2/RT5.png'],
+    includes: ['2 cartas originales', 'Toploader', 'Sleeves premium'],
+  },
+  {
+    id: 'slide-2',
+    title: 'Golpe de Agua',
+    subtitle: 'Control y defensa con Water',
+    combo: 'Floatzel GL + Wash Rotom',
+    priceLabel: 'S/ 34.50',
+    offerSlug: 'golpe-de-agua',
+    cards: ['pl2-104', 'pl2-RT5'],
+    images: ['https://images.pokemontcg.io/pl2/104.png', 'https://images.pokemontcg.io/pl2/RT5.png'],
+    includes: ['2 cartas originales', 'Toploader', 'Sleeves premium'],
+  },
+  {
+    id: 'slide-3',
+    title: 'Psíquicos Legendarios',
+    subtitle: 'Estrategia y control Psychic',
+    combo: 'Deoxys + Clefable',
+    priceLabel: 'S/ 33.90',
+    offerSlug: 'psiquicos-legendarios',
+    cards: ['col1-2', 'col1-1'],
+    images: ['https://images.pokemontcg.io/col1/2.png', 'https://images.pokemontcg.io/col1/1.png'],
+    includes: ['2 cartas originales', 'Toploader', 'Sleeves premium'],
+  },
+  {
+    id: 'slide-4',
+    title: 'Selva Dúo',
+    subtitle: 'Presión constante desde la hierba',
+    combo: 'Cacnea + Caterpie',
+    priceLabel: 'S/ 24.50',
+    offerSlug: 'selva-duo',
+    cards: ['ex16-46', 'swsh2-1'],
+    images: ['https://images.pokemontcg.io/ex16/46.png', 'https://images.pokemontcg.io/swsh2/1.png'],
+    includes: ['2 cartas originales', 'Toploader', 'Sleeves premium'],
+  },
+  {
+    id: 'slide-5',
+    title: 'Golpe de Arena',
+    subtitle: 'Dominio del terreno',
+    combo: 'Gliscor + Groudon',
+    priceLabel: 'S/ 37.50',
+    offerSlug: 'golpe-de-arena',
+    cards: ['hgss3-4', 'col1-6'],
+    images: ['https://images.pokemontcg.io/hgss3/4.png', 'https://images.pokemontcg.io/col1/6.png'],
+    includes: ['2 cartas originales', 'Toploader', 'Sleeves premium'],
+  },
+]
+
+export default function Home() {
+  const [cards, setCards] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+  const [error, setError] = useState('')
+  const [activeSlide, setActiveSlide] = useState(0)
+  const [currentPage, setCurrentPage] = useState(1)
+  const [totalPages, setTotalPages] = useState(1)
+  const pageSize = 20
+  const [typeFilters, setTypeFilters] = useState<string[]>([])
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setActiveSlide((prev) => (prev + 1) % heroSlides.length)
+    }, 6000)
+    return () => clearInterval(timer)
+  }, [])
+
+  const fetchCards = useCallback(async (page = 1) => {
+    setLoading(true)
+    setError('')
+    try {
+      const response = await fetch(`${CARDS_URL}/?page=${page}&pageSize=${pageSize}`)
+      if (!response.ok) throw new Error('No pudimos cargar las cartas, intenta de nuevo.')
+      const data = await response.json()
+      if (Array.isArray(data)) {
+        setCards(data)
+        setTotalPages(1)
+      } else {
+        setCards(data.results ?? [])
+        const totalCount = data.total ?? data.count ?? data.results?.length ?? 0
+        setTotalPages(Math.max(1, Math.ceil(totalCount / pageSize)))
+      }
+    } catch (fetchError: any) {
+      setError(fetchError.message ?? 'Error inesperado.')
+    } finally {
+      setLoading(false)
+    }
+  }, [pageSize])
+
+  useEffect(() => {
+    fetchCards(currentPage)
+  }, [currentPage, fetchCards])
+
+  useEffect(() => {
+    let ignore = false
+    const loadTypes = async () => {
+      try {
+        const res = await fetch(`${API_URL}/cards/types/`)
+        if (res.ok) {
+          const data = await res.json()
+          if (!ignore) setTypeFilters(Array.isArray(data) ? data : [])
+        }
+      } catch (err) {
+        console.error('Error cargando tipos:', err)
+      }
+    }
+    loadTypes()
+    return () => { ignore = true }
+  }, [])
+
+  const handlePageChange = (newPage: number) => {
+    setCurrentPage(newPage)
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
+  return (
+    <>
+      <section className="grid gap-3 px-[5vw] py-3" style={{ gridTemplateColumns: '3fr 1fr' }}>
+        <div className="relative overflow-hidden rounded-[28px] border-4 border-black p-3 min-h-[400px]" style={{ background: '#fce3b8' }}>
+          {heroSlides.map((slide, index) => (
+            <article
+              key={slide.id}
+              className={`grid items-center gap-4 transition-all duration-400 ${
+                index === activeSlide ? 'opacity-100 translate-x-0 relative pointer-events-auto' : 'opacity-0 translate-x-5 absolute inset-3 pointer-events-none'
+              }`}
+              style={{ gridTemplateColumns: '1fr 1fr' }}
+            >
+              <div>
+                <p className="text-xs uppercase tracking-wider m-0" style={{ color: '#d83000' }}>{slide.combo}</p>
+                <h1 className="m-2 text-[clamp(1.5rem,2vw,2.2rem)]" style={{ fontFamily: "'Press Start 2P', cursive" }}>{slide.title}</h1>
+                <p className="text-base mb-4" style={{ color: '#7a4a1b' }}>{slide.subtitle}</p>
+                <p className="text-sm my-2 mb-4" style={{ color: '#7a4a1b' }}>
+                  Incluye: {(slide.includes || []).join(', ')}.{' '}
+                  <strong>Stock limitado — ¡aprovecha el combo!</strong>
+                </p>
+                <div className="flex md:hidden items-center justify-center gap-1.5 my-1.5">
+                  {(slide.images || []).map((src, idx) => (
+                    <img key={idx} src={src} alt={`${slide.title} ${idx + 1}`} className="w-[44%] h-[220px] object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)]" />
+                  ))}
+                </div>
+                <div className="flex items-center gap-4">
+                  <span className="py-3 px-4 rounded-[14px] font-bold border-3 border-black" style={{ background: '#d83000', color: '#fff' }}>{slide.priceLabel}</span>
+                  <Link href={slide.offerSlug ? `/offer/${encodeURIComponent(slide.offerSlug)}` : '/'}>
+                    <button type="button" className="py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white transition-all duration-200 hover:-translate-y-0.5" style={{ background: '#d83000' }}>
+                      Comprar ahora
+                    </button>
+                  </Link>
+                </div>
+              </div>
+              <div className="hidden md:flex items-center justify-center gap-1.5">
+                {(slide.images || []).map((src, idx) => (
+                  <img key={idx} src={src} alt={`${slide.title} ${idx + 1}`} className="w-[48%] h-[380px] object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)]" />
+                ))}
+              </div>
+            </article>
+          ))}
+          <div className="absolute right-6 bottom-4 flex gap-1">
+            {heroSlides.map((slide, index) => (
+              <button
+                key={slide.id}
+                type="button"
+                className={`w-2.5 h-2.5 rounded-full border-none cursor-pointer ${index === activeSlide ? 'opacity-100' : 'opacity-40'}`}
+                style={{ background: index === activeSlide ? '#d83000' : '#fff' }}
+                onClick={() => setActiveSlide(index)}
+                aria-label={`Ir al slide ${index + 1}`}
+              />
+            ))}
+          </div>
+        </div>
+        <aside className="hidden md:flex flex-col gap-4">
+          <div className="bg-white border-[3px] border-black rounded-[20px] p-6">
+            <p className="m-0 text-sm" style={{ color: '#7a4a1b' }}>Entrega promedio</p>
+            <strong className="block text-2xl my-1" style={{ color: '#d83000' }}>30 min</strong>
+            <small className="block text-xs" style={{ color: '#7a4a1b' }}>Solo Lima</small>
+          </div>
+          <div className="bg-white border-[3px] border-black rounded-[20px] p-6">
+            <p className="m-0 text-sm" style={{ color: '#7a4a1b' }}>Cartas activas</p>
+            <strong className="block text-2xl my-1" style={{ color: '#d83000' }}>{cards.length || '—'}</strong>
+            <small className="block text-xs" style={{ color: '#7a4a1b' }}>Actualizado en vivo</small>
+          </div>
+          <div className="bg-white border-[3px] border-black rounded-[20px] p-6">
+            <p className="m-0 text-sm" style={{ color: '#7a4a1b' }}>Protección</p>
+            <strong className="block text-2xl my-1" style={{ color: '#d83000' }}>Toploader</strong>
+            <small className="block text-xs" style={{ color: '#7a4a1b' }}>Incluida en combos</small>
+          </div>
+        </aside>
+      </section>
+
+      <section className="grid gap-3 px-[5vw] py-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))' }}>
+        {(typeFilters.length
+          ? typeFilters
+          : ['Grass', 'Fire', 'Water', 'Lightning', 'Psychic', 'Fighting', 'Darkness', 'Metal', 'Fairy', 'Dragon', 'Colorless']
+        ).map((label) => (
+          <Link key={label} href={`/search?type=${encodeURIComponent(label)}`} className="no-underline">
+            <button type="button" className="w-full py-3 rounded-full font-semibold uppercase cursor-pointer border-2 border-black transition-colors duration-200 hover:text-white" style={{ background: '#fff1c7' }}
+              onMouseEnter={(e) => { e.currentTarget.style.background = '#d83000'; e.currentTarget.style.color = '#fff' }}
+              onMouseLeave={(e) => { e.currentTarget.style.background = '#fff1c7'; e.currentTarget.style.color = 'inherit' }}
+            >
+              {label}
+            </button>
+          </Link>
+        ))}
+      </section>
+
+      <section className="px-[5vw] pb-8">
+        <div className="flex justify-between items-baseline mb-6">
+          <div>
+            <h2 className="m-0 text-3xl">Cartas destacadas</h2>
+            <p className="m-1 mt-1 text-sm" style={{ color: '#7a4a1b' }}>Basado en datos locales de PikaCards</p>
+          </div>
+          <span className="text-sm" style={{ color: '#7a4a1b' }}>{cards.length} resultados</span>
+        </div>
+
+        {loading && <p className="py-8 font-semibold text-center">Cargando cartas...</p>}
+        {error && !loading && <p className="py-8 font-semibold text-center" style={{ color: '#d83000' }}>{error}</p>}
+        {!loading && !error && cards.length === 0 && (
+          <p className="py-8 font-semibold text-center">No encontramos cartas.</p>
+        )}
+
+        <div className="grid gap-6 mb-8" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+          {!loading && !error && cards.map((card: any) => <Card key={card.id} card={card} />)}
+        </div>
+
+        {!loading && !error && totalPages > 1 && (
+          <div className="flex justify-center items-center gap-4 mt-8">
+            <button
+              type="button"
+              onClick={() => handlePageChange(currentPage - 1)}
+              disabled={currentPage === 1}
+              className="px-5 py-2.5 rounded-full font-semibold cursor-pointer border-2 border-black bg-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#d83000] hover:text-white"
+            >
+              ← Anterior
+            </button>
+            <span className="font-semibold">
+              Página {currentPage} de {totalPages}
+            </span>
+            <button
+              type="button"
+              onClick={() => handlePageChange(currentPage + 1)}
+              disabled={currentPage >= totalPages}
+              className="px-5 py-2.5 rounded-full font-semibold cursor-pointer border-2 border-black bg-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#d83000] hover:text-white"
+            >
+              Siguiente →
+            </button>
+          </div>
+        )}
+      </section>
+    </>
+  )
+}
