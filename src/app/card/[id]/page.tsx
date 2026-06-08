@@ -67,7 +67,7 @@ export default function CardDetailPage() {
         ← Volver
       </button>
 
-      <div className="card-lg grid gap-12 p-8" style={{ gridTemplateColumns: '1fr 1fr' }}>
+      <div className="card-lg grid gap-8 p-8 md:grid-cols-2">
         <div className="flex items-center justify-center rounded-[20px] p-8 bg-card">
           <img src={getCardImage(card)} alt={card.name} className="max-w-full h-auto object-contain" />
         </div>

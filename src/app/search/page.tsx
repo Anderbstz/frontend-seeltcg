@@ -3,6 +3,7 @@
 import { Suspense, useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
 import Card from '@/components/Card'
+import { translateType, translateRarity } from '@/lib/translations'
 import { API_URL } from '@/lib/config'
 
 function SearchContent() {
@@ -146,29 +147,29 @@ function SearchContent() {
 
   return (
     <div className="px-[5vw] py-8 max-w-[1400px] mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="m-0 text-4xl">Búsqueda de Cartas</h1>
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
+        <h1 className="m-0 text-3xl sm:text-4xl">Búsqueda de Cartas</h1>
         <button
           type="button"
-          className="btn-outline"
+          className="btn-outline w-full sm:w-auto"
           onClick={() => setAdvancedMode(!advancedMode)}
         >
           {advancedMode ? 'Búsqueda Simple' : 'Búsqueda Avanzada'}
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="card p-8 mb-8">
+      <form onSubmit={handleSubmit} className="card p-6 md:p-8 mb-8">
         {!advancedMode ? (
-          <div className="flex gap-4">
+          <div className="flex flex-col sm:flex-row gap-4">
             <input
               type="search"
               placeholder="Buscar carta, set o artista..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              className="flex-1 border-2 border-black rounded-full px-6 py-3 text-base"
+              className="flex-1 border-2 border-black rounded-full px-6 py-3 text-base w-full"
               style={{ fontFamily: "'Space Grotesk', sans-serif", outline: 'none' }}
             />
-            <button type="submit" className="btn-primary">
+            <button type="submit" className="btn-primary w-full sm:w-auto">
               Buscar
             </button>
           </div>
@@ -192,7 +193,7 @@ function SearchContent() {
                 <select value={type} onChange={(e) => setType(e.target.value)}
                   className="input-field">
                   <option value="">Todos</option>
-                  {types.map((t) => <option key={t} value={t}>{t}</option>)}
+                  {types.map((t) => <option key={t} value={t}>{translateType(t)}</option>)}
                 </select>
               </div>
               <div className="flex flex-col gap-2">
@@ -200,7 +201,7 @@ function SearchContent() {
                 <select value={rarity} onChange={(e) => setRarity(e.target.value)}
                   className="input-field">
                   <option value="">Todas</option>
-                  {rarities.map((r) => <option key={r} value={r}>{r}</option>)}
+                  {rarities.map((r) => <option key={r} value={r}>{translateRarity(r)}</option>)}
                 </select>
               </div>
               <div className="flex flex-col gap-2">

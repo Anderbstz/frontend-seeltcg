@@ -7,6 +7,7 @@ import { API_URL } from '@/lib/config'
 import { useCart } from '@/contexts/CartContext'
 import { useAuth } from '@/contexts/AuthContext'
 import { formatCurrency, getCardImage, getCardPrice, getCardSetName } from '@/utils/cards'
+import { translateType, translateRarity } from '@/lib/translations'
 import { FiSearch, FiShoppingCart, FiUser, FiChevronDown, FiGrid } from 'react-icons/fi'
 
 export default function Navbar() {
@@ -24,6 +25,7 @@ export default function Navbar() {
   const [types, setTypes] = useState<string[]>([])
   const [rarities, setRarities] = useState<string[]>([])
   const [showProfilePanel, setShowProfilePanel] = useState(false)
+  const [showLoginDropdown, setShowLoginDropdown] = useState(false)
   const [avatar, setAvatar] = useState('')
 
   const searchRef = useRef<HTMLDivElement>(null)
@@ -97,6 +99,7 @@ export default function Navbar() {
       if (menuRef.current && !menuRef.current.contains(event.target as Node)) setMenuOpen(false)
       if (searchRef.current && !searchRef.current.contains(event.target as Node)) setShowSearchPanel(false)
       if (profileRef.current && !profileRef.current.contains(event.target as Node)) setShowProfilePanel(false)
+      setShowLoginDropdown(false)
     }
     document.addEventListener('mousedown', handleClickOutside)
     return () => document.removeEventListener('mousedown', handleClickOutside)
@@ -172,7 +175,7 @@ export default function Navbar() {
 
   return (
     <nav className="flex flex-wrap gap-3 items-center px-[5vw] py-7 min-h-[7rem]" style={{ background: '#f0d088' }}>
-      <div className="min-w-[180px]">
+      <div className="w-full sm:w-auto min-w-[180px] shrink-0">
         <Link href="/" className="flex flex-row items-center gap-1 no-underline text-accent" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '1.15rem' }}>
           <img src="/Icon_Seatcg.png" alt="Seatcg Logo" className="w-11 h-11 rounded-md object-contain" />
           <div className="flex flex-col gap-0.5">
@@ -195,7 +198,7 @@ export default function Navbar() {
             <FiGrid size={26} />
           </button>
           {menuOpen && (
-            <div className="absolute z-30 top-full left-0 mt-2 bg-white border-[3px] border-black rounded-[20px] p-6 shadow-[10px_10px_0_#00000020]" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(140px, 1fr))', gap: '1.5rem', minWidth: '320px' }}>
+            <div className="absolute z-30 top-full left-0 mt-2 bg-white border-[3px] border-black rounded-[20px] p-4 sm:p-6 shadow-[10px_10px_0_#00000020] grid grid-cols-2 gap-4 sm:gap-6 min-w-[260px] sm:min-w-[320px]">
               <div>
                 <p className="uppercase text-xs tracking-wider mb-1 text-muted">Tipos</p>
                 <ul className="list-none p-0 m-0 flex flex-col gap-1">
@@ -203,13 +206,13 @@ export default function Navbar() {
                     <li key={type}>
                       <button
                         type="button"
-                        className="w-full border-2 border-black rounded-xl px-2.5 py-1 cursor-pointer text-left font-semibold"
+                        className="w-full border-2 border-black rounded-xl px-2.5 py-1 cursor-pointer text-left font-semibold text-sm sm:text-base"
                         style={{ background: '#fff1c7' }}
                         onMouseEnter={(e) => { e.currentTarget.style.background = '#d83000'; e.currentTarget.style.color = '#fff' }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = '#fff1c7'; e.currentTarget.style.color = 'inherit' }}
                         onClick={() => handleNavigateFilter('type', type)}
                       >
-                        {type}
+                        {translateType(type)}
                       </button>
                     </li>
                   ))}
@@ -222,13 +225,12 @@ export default function Navbar() {
                     <li key={rarity}>
                       <button
                         type="button"
-                        className="w-full border-2 border-black rounded-xl px-2.5 py-1 cursor-pointer text-left font-semibold"
-                        style={{ background: '#fff1c7' }}
+                        className="w-full border-2 border-black rounded-xl px-2.5 py-1 cursor-pointer text-left font-semibold text-sm sm:text-base bg-filter"
                         onMouseEnter={(e) => { e.currentTarget.style.background = '#d83000'; e.currentTarget.style.color = '#fff' }}
                         onMouseLeave={(e) => { e.currentTarget.style.background = '#fff1c7'; e.currentTarget.style.color = 'inherit' }}
                         onClick={() => handleNavigateFilter('rarity', rarity)}
                       >
-                        {rarity}
+                        {translateRarity(rarity)}
                       </button>
                     </li>
                   ))}
@@ -246,7 +248,7 @@ export default function Navbar() {
               value={searchTerm}
               onChange={handleSearchChange}
               onFocus={() => setShowSearchPanel(true)}
-              className="flex-1 border-none px-4 py-3 text-base bg-transparent min-w-0 w-[120px] sm:w-full"
+              className="flex-1 border-none px-4 py-3 text-base bg-transparent min-w-0"
               style={{ fontFamily: "'Space Grotesk', sans-serif", outline: 'none' }}
             />
             <button type="submit" className="flex items-center justify-center w-[52px] h-[52px] p-0 bg-transparent border-none cursor-pointer shrink-0" aria-label="Buscar">
@@ -338,11 +340,39 @@ export default function Navbar() {
                 )}
               </>
             ) : (
-              <Link href="/login">
-                <button type="button" className="rounded-full cursor-pointer border-2 border-black bg-white px-3 py-2 text-base font-semibold" aria-label="Ingresar">
-                  Login / Register
-                </button>
-              </Link>
+              <>
+                {/* Desktop: text button */}
+                <Link href="/login" className="hidden sm:inline-flex">
+                  <button type="button" className="rounded-full cursor-pointer border-2 border-black bg-white px-3 py-2 text-base font-semibold" aria-label="Ingresar">
+                    Login / Register
+                  </button>
+                </Link>
+                {/* Mobile: user icon with dropdown */}
+                <div className="relative sm:hidden">
+                  <button
+                    type="button"
+                    className="flex items-center justify-center w-[52px] h-[52px] rounded-full border-2 border-black bg-white"
+                    onClick={(e) => { e.stopPropagation(); setShowLoginDropdown((prev) => !prev) }}
+                    aria-label="Ingresar"
+                  >
+                    <FiUser size={26} />
+                  </button>
+                  {showLoginDropdown && (
+                    <div className="absolute z-30 right-0 top-full mt-2 bg-white border-[3px] border-black rounded-[20px] p-3 min-w-[180px] shadow-[10px_10px_0_#00000020] flex flex-col gap-1">
+                      <Link href="/login" className="w-full border-2 border-black rounded-xl px-3 py-2 bg-filter text-left font-semibold hover:bg-[#d83000] hover:text-white no-underline" onClick={() => setShowLoginDropdown(false)}>
+                        Iniciar sesión
+                      </Link>
+                      <button
+                        type="button"
+                        className="w-full border-2 border-black rounded-xl px-3 py-2 bg-filter text-left font-semibold hover:bg-[#d83000] hover:text-white cursor-pointer"
+                        onClick={() => { setShowLoginDropdown(false); router.push('/login') }}
+                      >
+                        Registrarse
+                      </button>
+                    </div>
+                  )}
+                </div>
+              </>
             )}
           </div>
         </div>

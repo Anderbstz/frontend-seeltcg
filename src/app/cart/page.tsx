@@ -140,34 +140,44 @@ export default function CartPage() {
         </div>
       )}
 
-      <div className="grid gap-8" style={{ gridTemplateColumns: '2fr 1fr' }}>
+      <div className="grid gap-8 md:grid-cols-[2fr_1fr]">
         <div className="flex flex-col gap-4">
           {cart.map((item) => (
-            <div key={item.id} className="card-sm grid gap-6 items-center p-6" style={{ gridTemplateColumns: '120px 1fr auto auto' }}>
-              <div className="w-[120px] h-[120px] rounded-xl flex items-center justify-center overflow-hidden bg-card">
-                <img
-                  src={item.image || FALLBACK_CARD_IMAGE}
-                  alt={item.name}
-                  className="w-full h-full object-contain"
-                  onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_CARD_IMAGE }}
-                />
+            <div key={item.id} className="card-sm p-4 md:p-6">
+              {/* Top row: image + info */}
+              <div className="flex gap-4 items-start mb-4">
+                <div className="w-[80px] md:w-[120px] h-[80px] md:h-[120px] rounded-xl flex items-center justify-center overflow-hidden shrink-0 bg-card">
+                  <img
+                    src={item.image || FALLBACK_CARD_IMAGE}
+                    alt={item.name}
+                    className="w-full h-full object-contain"
+                    onError={(e) => { (e.target as HTMLImageElement).src = FALLBACK_CARD_IMAGE }}
+                  />
+                </div>
+                <div className="flex-1 min-w-0">
+                  <h3 className="m-0 text-lg md:text-xl font-bold truncate">{item.name}</h3>
+                  <p className="m-0 mt-1 text-sm text-muted">{formatCurrency(item.price)}</p>
+                </div>
+                {/* Desktop subtotal */}
+                <div className="hidden md:block text-xl font-bold text-accent shrink-0">
+                  {formatCurrency(parseFloat(String(item.price)) * item.qty)}
+                </div>
               </div>
-              <div className="flex flex-col gap-2">
-                <h3 className="m-0 text-xl">{item.name}</h3>
-                <p className="m-0 text-sm text-muted">{formatCurrency(item.price)}</p>
-              </div>
-              <div className="flex flex-col gap-3 items-center">
+
+              {/* Bottom row: quantity + actions */}
+              <div className="flex items-center justify-between gap-3 pt-3 border-t-2 border-black/10">
                 <div className="flex items-center gap-3 rounded-full border-2 border-black p-1.5 bg-card">
                   <button type="button" onClick={() => updateQuantity(item.id, item.qty - 1)} className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center font-bold cursor-pointer hover:bg-[#d83000] hover:text-white transition-colors duration-200">−</button>
                   <span className="font-bold min-w-[30px] text-center">{item.qty}</span>
                   <button type="button" onClick={() => updateQuantity(item.id, item.qty + 1)} className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center font-bold cursor-pointer hover:bg-[#d83000] hover:text-white transition-colors duration-200">+</button>
                 </div>
-                <button type="button" onClick={() => removeFromCart(item.id)} className="btn-danger-soft">
+                {/* Mobile subtotal */}
+                <span className="md:hidden text-lg font-bold text-accent">
+                  {formatCurrency(parseFloat(String(item.price)) * item.qty)}
+                </span>
+                <button type="button" onClick={() => removeFromCart(item.id)} className="btn-danger-soft shrink-0">
                   Eliminar
                 </button>
-              </div>
-              <div className="text-xl font-bold text-right text-accent">
-                {formatCurrency(parseFloat(String(item.price)) * item.qty)}
               </div>
             </div>
           ))}

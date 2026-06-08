@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
 import Card from '@/components/Card'
 import HeroSlide from '@/components/HeroSlide'
+import { translateType } from '@/lib/translations'
 import { CARDS_URL, API_URL } from '@/lib/config'
 
 const heroSlides = [
@@ -178,7 +179,7 @@ export default function Home() {
               onMouseEnter={(e) => { e.currentTarget.style.background = '#d83000'; e.currentTarget.style.color = '#fff' }}
               onMouseLeave={(e) => { e.currentTarget.style.background = '#fff1c7'; e.currentTarget.style.color = 'inherit' }}
             >
-              {label}
+              {translateType(label)}
             </button>
           </Link>
         ))}

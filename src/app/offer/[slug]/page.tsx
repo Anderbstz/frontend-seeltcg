@@ -123,10 +123,10 @@ export default function OfferPage() {
       {error && !loading && <p className="status-msg text-accent">{error}</p>}
 
       {!loading && !error && (
-        <div className="grid gap-6 rounded-[28px] border-4 border-black p-6 justify-items-center" style={{ gridTemplateColumns: '1.7fr 0.5fr', background: '#fce3b8' }}>
+        <div className="grid gap-6 rounded-[28px] border-4 border-black p-4 md:p-6 justify-items-center md:grid-cols-[1.7fr_0.5fr]" style={{ background: '#fce3b8' }}>
           <div className="flex items-center justify-center gap-3">
             {items.map((card) => (
-              <img key={card.id} src={getCardImage(card)} alt={card.name} className="w-[48%] h-[460px] object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)]" />
+              <img key={card.id} src={getCardImage(card)} alt={card.name} className="w-[48%] h-[300px] md:h-[460px] object-contain drop-shadow-[0_12px_28px_rgba(0,0,0,0.2)]" />
             ))}
           </div>
           <aside className="flex flex-col gap-4">
