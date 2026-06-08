@@ -131,7 +131,7 @@ export default function Home() {
   return (
     <>
       <section className="grid gap-3 px-[5vw] py-3 md:grid-cols-[3fr_1fr]">
-        <div className="relative overflow-hidden rounded-[28px] border-4 border-black p-3 min-h-[400px]" style={{ background: '#fce3b8' }}>
+        <div className="relative overflow-hidden rounded-[28px] border-4 border-black p-3 min-h-[460px]" style={{ background: '#fce3b8' }}>
           {heroSlides.map((slide, index) => (
             <article
               key={slide.id}
@@ -168,7 +168,7 @@ export default function Home() {
               </div>
             </article>
           ))}
-          <div className="absolute right-6 bottom-4 flex gap-1">
+          <div className="absolute left-1/2 -translate-x-1/2 bottom-4 flex gap-1">
             {heroSlides.map((slide, index) => (
               <button
                 key={slide.id}
