@@ -27,7 +27,7 @@ const OFFERS = [
   },
   {
     slug: 'psiquicos-legendarios',
-    title: 'Psíquicos Legendarios',
+    title: 'Psíquicos Legend',
     subtitle: 'Estrategia y control Psychic',
     combo: 'Deoxys + Clefable',
     priceLabel: 'S/ 33.90',
