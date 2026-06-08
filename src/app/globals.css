@@ -46,3 +46,95 @@ a {
 button {
   font-family: inherit;
 }
+
+/* ========== Utility Classes ========== */
+
+/* Buttons */
+@utility btn-primary {
+  @apply py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white transition-transform duration-200 hover:-translate-y-0.5;
+  background: #d83000;
+}
+
+@utility btn-primary-lg {
+  @apply py-4 px-8 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white text-lg transition-transform duration-200 hover:-translate-y-0.5;
+  background: #d83000;
+}
+
+@utility btn-outline {
+  @apply px-5 py-2.5 rounded-full font-semibold cursor-pointer border-2 border-black bg-white transition-colors duration-200 hover:bg-[#d83000] hover:text-white;
+}
+
+@utility btn-danger {
+  @apply py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white;
+  background: #ff4d4f;
+}
+
+@utility btn-danger-soft {
+  @apply px-3 py-1.5 rounded-full text-sm font-semibold cursor-pointer border-2 transition-colors duration-200 hover:bg-[#d83000] hover:text-white;
+  border-color: #d83000;
+  color: #d83000;
+  background: #fff;
+}
+
+/* Cards */
+@utility card {
+  @apply bg-white border-[3px] border-black rounded-[24px];
+}
+
+@utility card-sm {
+  @apply bg-white border-[3px] border-black rounded-[20px];
+}
+
+@utility card-lg {
+  @apply bg-white border-[3px] border-black rounded-[28px];
+}
+
+/* Text */
+@utility text-muted {
+  color: #7a4a1b;
+}
+
+@utility text-accent {
+  color: #d83000;
+}
+
+/* Backgrounds */
+@utility bg-card {
+  background: #fef7e7;
+}
+
+@utility bg-filter {
+  background: #fff1c7;
+}
+
+/* Inputs */
+@utility input-field {
+  @apply border-2 border-black rounded-lg p-3 text-base;
+  font-family: 'Space Grotesk', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+}
+
+/* Status messages */
+@utility status-msg {
+  @apply py-8 font-semibold text-center;
+}
+
+/* Page container */
+@utility page-container {
+  @apply px-[5vw] py-8;
+}
+
+@utility page-container-md {
+  @apply px-[5vw] py-8 max-w-[1200px] mx-auto;
+}
+
+/* Card grid */
+@utility grid-cards {
+  @apply grid gap-6;
+  grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+}
+
+/* Total bar (checkout/order summary bar) */
+@utility total-bar {
+  @apply flex justify-between items-center text-white border-[3px] border-black rounded-[16px] px-4 py-2.5;
+  background: #d83000;
+}

@@ -15,7 +15,7 @@ export default function LayoutClient({ children }: { children: ReactNode }) {
       </header>
       <Navbar />
       <main className="flex-1 pb-16">{children}</main>
-      <footer className="px-[5vw] py-8 text-sm text-center" style={{ color: '#7a4a1b' }}>
+      <footer className="px-[5vw] py-8 text-sm text-center text-muted">
         <p className="m-0">Pokémon TCG data © Pokémon. PikaCards es un fan store independiente.</p>
       </footer>
       <ChatBubble />

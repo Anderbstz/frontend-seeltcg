@@ -38,17 +38,17 @@ export default function CardDetailPage() {
 
   if (loading) {
     return (
-      <div className="px-[5vw] py-8 max-w-[1200px] mx-auto">
-        <p className="py-8 font-semibold text-center">Cargando carta...</p>
+      <div className="page-container-md">
+        <p className="status-msg">Cargando carta...</p>
       </div>
     )
   }
 
   if (error || !card) {
     return (
-      <div className="px-[5vw] py-8 max-w-[1200px] mx-auto">
-        <p className="py-8 font-semibold text-center" style={{ color: '#d83000' }}>{error || 'Carta no encontrada'}</p>
-        <button type="button" className="block mx-auto py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#d83000' }} onClick={() => router.push('/')}>
+      <div className="page-container-md">
+        <p className="status-msg text-accent">{error || 'Carta no encontrada'}</p>
+        <button type="button" className="btn-primary block mx-auto" onClick={() => router.push('/')}>
           Volver al inicio
         </button>
       </div>
@@ -58,17 +58,17 @@ export default function CardDetailPage() {
   const price = formatCurrency(getCardPrice(card))
 
   return (
-    <div className="px-[5vw] py-8 max-w-[1200px] mx-auto">
+    <div className="page-container-md">
       <button
         type="button"
-        className="mb-8 px-5 py-2.5 rounded-full font-semibold cursor-pointer border-2 border-black bg-white hover:bg-[#d83000] hover:text-white transition-colors duration-200"
+        className="btn-outline mb-8"
         onClick={() => router.back()}
       >
         ← Volver
       </button>
 
-      <div className="grid gap-12 bg-white border-[3px] border-black rounded-[28px] p-8" style={{ gridTemplateColumns: '1fr 1fr' }}>
-        <div className="flex items-center justify-center rounded-[20px] p-8" style={{ background: '#fef7e7' }}>
+      <div className="card-lg grid gap-12 p-8" style={{ gridTemplateColumns: '1fr 1fr' }}>
+        <div className="flex items-center justify-center rounded-[20px] p-8 bg-card">
           <img src={getCardImage(card)} alt={card.name} className="max-w-full h-auto object-contain" />
         </div>
 
@@ -87,15 +87,14 @@ export default function CardDetailPage() {
           {card.hp && <p className="m-0 text-base"><strong>HP:</strong> {card.hp}</p>}
           {card.artist && <p className="m-0 text-base"><strong>Artista:</strong> {card.artist}</p>}
 
-          <div className="flex flex-col gap-2 p-6 rounded-[16px] border-2 border-black" style={{ background: '#fef7e7' }}>
-            <span className="text-xs uppercase tracking-wider" style={{ color: '#7a4a1b' }}>Precio de mercado</span>
-            <span className="text-3xl font-bold" style={{ color: '#d83000' }}>{price ?? 'Consultar'}</span>
+          <div className="flex flex-col gap-2 p-6 rounded-[16px] border-2 border-black bg-card">
+            <span className="text-xs uppercase tracking-wider text-muted">Precio de mercado</span>
+            <span className="text-3xl font-bold text-accent">{price ?? 'Consultar'}</span>
           </div>
 
           <button
             type="button"
-            className="py-4 px-8 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white text-lg transition-transform duration-200 hover:-translate-y-0.5"
-            style={{ background: '#d83000' }}
+            className="btn-primary-lg"
             onClick={handleAddToCart}
           >
             Añadir al carrito
@@ -106,11 +105,11 @@ export default function CardDetailPage() {
               <h3 className="m-0 mb-4 text-xl">Ataques</h3>
               <ul className="list-none p-0 m-0 flex flex-col gap-3">
                 {card.attacks.map((attack: any, index: number) => (
-                  <li key={index} className="p-3 rounded-lg border-2 border-black" style={{ background: '#fef7e7' }}>
+                  <li key={index} className="p-3 rounded-lg border-2 border-black bg-card">
                     <strong>{attack.name}</strong>
                     {attack.damage && <span> - {attack.damage}</span>}
                     {attack.cost && (
-                      <span className="text-sm" style={{ color: '#7a4a1b' }}> Costo: {attack.cost.join(', ')}</span>
+                      <span className="text-sm text-muted"> Costo: {attack.cost.join(', ')}</span>
                     )}
                   </li>
                 ))}

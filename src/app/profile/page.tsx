@@ -73,11 +73,11 @@ export default function ProfilePage() {
 
   if (!isAuthenticated()) {
     return (
-      <div className="px-[5vw] py-8 max-w-[1200px] mx-auto">
-        <div className="bg-white border-[3px] border-black rounded-[24px] p-6">
+      <div className="page-container-md">
+        <div className="card p-6">
           <h1 className="text-3xl m-0 mb-4">Perfil</h1>
           <p className="py-4 font-semibold text-center">Debes iniciar sesión para ver tu perfil.</p>
-          <button type="button" className="block mx-auto py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#d83000' }} onClick={() => router.push('/login')}>
+          <button type="button" className="btn-primary block mx-auto" onClick={() => router.push('/login')}>
             Iniciar sesión
           </button>
         </div>
@@ -149,7 +149,7 @@ export default function ProfilePage() {
   }
 
   return (
-    <div className="px-[5vw] py-8 max-w-[1200px] mx-auto">
+    <div className="page-container-md">
       <div className="flex justify-between items-center mb-6">
         <h1 className="m-0 text-3xl">Mi perfil</h1>
         <button type="button" className="px-4 py-2 rounded-full font-semibold cursor-pointer border-2 border-black bg-white hover:bg-[#d83000] hover:text-white transition-colors duration-200" onClick={() => router.back()}>
@@ -161,15 +161,15 @@ export default function ProfilePage() {
         {/* Identity Card */}
         <section className="bg-white border-[3px] border-black rounded-[24px] p-6">
           <div className="flex items-center gap-4 mb-4">
-            <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl border-[3px] border-black overflow-hidden" style={{ background: '#fff1c7' }}>
+            <div className="w-16 h-16 rounded-full flex items-center justify-center text-3xl border-[3px] border-black overflow-hidden bg-filter">
               {profileData.avatar ? (
                 <img src={profileData.avatar} alt="Avatar" className="w-full h-full object-cover rounded-full" />
               ) : '👤'}
             </div>
             <div>
               {fullName && <h2 className="m-0">{fullName}</h2>}
-              <p className="m-0 text-sm" style={{ color: '#7a4a1b' }}>@{username}</p>
-              {email && <p className="m-0 text-sm" style={{ color: '#7a4a1b' }}>{email}</p>}
+              <p className="m-0 text-sm text-muted">@{username}</p>
+              {email && <p className="m-0 text-sm text-muted">{email}</p>}
             </div>
           </div>
           <div className="flex gap-3">
@@ -180,7 +180,7 @@ export default function ProfilePage() {
               Cerrar sesión
             </button>
           </div>
-          {statusMsg && <p className="mt-3 text-sm" style={{ color: '#7a4a1b' }}>{statusMsg}</p>}
+          {statusMsg && <p className="mt-3 text-sm text-muted">{statusMsg}</p>}
         </section>
 
         {/* Preferences */}
@@ -198,7 +198,7 @@ export default function ProfilePage() {
                 </label>
               ))}
             </div>
-            <p className="text-sm m-0" style={{ color: '#7a4a1b' }}>Actual: {PREF_IMG_SIZE_MAP[imgSizePref]}px</p>
+            <p className="text-sm m-0 text-muted">Actual: {PREF_IMG_SIZE_MAP[imgSizePref]}px</p>
           </div>
           <div className="flex flex-col gap-2.5">
             <label className="font-semibold text-sm uppercase tracking-wider">Accesos rápidos</label>
@@ -215,7 +215,7 @@ export default function ProfilePage() {
           <div className="flex flex-col gap-2.5 mb-4">
             <label className="font-semibold text-sm uppercase tracking-wider">Provincia</label>
             <select value={profileData.province} onChange={(e) => setProfileData((p) => ({ ...p, province: e.target.value }))}
-              className="border-2 border-black rounded-lg px-3 py-2 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+              className="input-field">
               <option value="">Selecciona una provincia</option>
               {provinces.map((p) => <option key={p} value={p}>{p}</option>)}
             </select>
@@ -224,14 +224,14 @@ export default function ProfilePage() {
             <label className="font-semibold text-sm uppercase tracking-wider">Dirección</label>
             <input type="text" placeholder="Calle, número, referencia..." value={profileData.address}
               onChange={(e) => setProfileData((p) => ({ ...p, address: e.target.value }))}
-              className="border-2 border-black rounded-lg px-3 py-2 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
+              className="input-field" />
           </div>
           <div className="flex flex-col gap-2.5 mb-4">
             <label className="font-semibold text-sm uppercase tracking-wider">Imagen de perfil</label>
             <input type="file" accept="image/*" onChange={(e) => handleAvatarChange(e.target.files?.[0])}
-              className="border-2 border-black rounded-lg px-3 py-2 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
+              className="input-field" />
           </div>
-          <button type="button" className="py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#d83000' }} onClick={saveProfileLocal}>Guardar</button>
+          <button type="button" className="btn-primary" onClick={saveProfileLocal}>Guardar</button>
         </section>
 
         {/* Security */}
@@ -241,29 +241,29 @@ export default function ProfilePage() {
             <div className="flex flex-col gap-1">
               <label className="font-semibold text-sm uppercase tracking-wider">Contraseña actual</label>
               <input type="password" value={security.current} onChange={(e) => setSecurity((s) => ({ ...s, current: e.target.value }))}
-                className="border-2 border-black rounded-lg px-3 py-2 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
+                className="input-field" />
             </div>
             <div className="flex flex-col gap-1">
               <label className="font-semibold text-sm uppercase tracking-wider">Nueva contraseña</label>
               <input type="password" value={security.next} onChange={(e) => setSecurity((s) => ({ ...s, next: e.target.value }))}
-                className="border-2 border-black rounded-lg px-3 py-2 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
+                className="input-field" />
             </div>
             <div className="flex flex-col gap-1">
               <label className="font-semibold text-sm uppercase tracking-wider">Confirmar nueva contraseña</label>
               <input type="password" value={security.confirm} onChange={(e) => setSecurity((s) => ({ ...s, confirm: e.target.value }))}
-                className="border-2 border-black rounded-lg px-3 py-2 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
+                className="input-field" />
             </div>
-            <button type="submit" className="py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white self-start" style={{ background: '#d83000' }}>Cambiar contraseña</button>
+            <button type="submit" className="btn-primary self-start">Cambiar contraseña</button>
           </form>
           <hr className="my-4 border-t-2 border-black" />
-          <button type="button" className="py-2.5 px-5 rounded-xl font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#ff4d4f' }} onClick={deleteAccount}>Eliminar cuenta</button>
+          <button type="button" className="btn-danger" onClick={deleteAccount}>Eliminar cuenta</button>
         </section>
 
         {/* Payment Method */}
         <section className="bg-white border-[3px] border-black rounded-[24px] p-6">
           <h3 className="m-0 mb-4 text-lg">Método de pago</h3>
-          <p className="text-sm mb-4" style={{ color: '#7a4a1b' }}>Gestiona tus tarjetas y pagos desde el portal seguro de Stripe.</p>
-          <button type="button" className="py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#d83000' }} onClick={managePaymentMethod}>Gestionar método de pago</button>
+          <p className="text-sm mb-4 text-muted">Gestiona tus tarjetas y pagos desde el portal seguro de Stripe.</p>
+          <button type="button" className="btn-primary" onClick={managePaymentMethod}>Gestionar método de pago</button>
         </section>
       </div>
     </div>

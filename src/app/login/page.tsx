@@ -114,7 +114,7 @@ export default function LoginPage() {
 
   return (
     <div className="flex items-center justify-center min-h-[60vh] px-[5vw] py-8">
-      <div className="bg-white border-[3px] border-black rounded-[24px] p-12 max-w-[450px] w-full">
+      <div className="card p-12 max-w-[450px] w-full">
         <h1 className="m-0 mb-6 text-3xl text-center">{isLogin ? 'Iniciar Sesión' : 'Registrarse'}</h1>
 
         <button
@@ -142,33 +142,32 @@ export default function LoginPage() {
           <div className="flex flex-col gap-2">
             <label htmlFor="username" className="font-semibold text-sm uppercase tracking-wider">Usuario</label>
             <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required placeholder="Tu nombre de usuario"
-              className="border-2 border-black rounded-lg p-3 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif", outline: 'none' }} />
+              className="input-field outline-none" />
           </div>
 
           {!isLogin && (
             <div className="flex flex-col gap-2">
               <label htmlFor="email" className="font-semibold text-sm uppercase tracking-wider">Email</label>
               <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required placeholder="tu@email.com"
-                className="border-2 border-black rounded-lg p-3 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif", outline: 'none' }} />
-            </div>
+                className="input-field outline-none" />
+          </div>
           )}
 
           <div className="flex flex-col gap-2">
             <label htmlFor="password" className="font-semibold text-sm uppercase tracking-wider">Contraseña</label>
             <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required placeholder="••••••••"
-              className="border-2 border-black rounded-lg p-3 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif", outline: 'none' }} />
+              className="input-field outline-none" />
           </div>
 
           <button type="submit" disabled={loading}
-            className="py-4 px-8 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white text-lg disabled:opacity-60 disabled:cursor-not-allowed transition-transform duration-200 hover:-translate-y-0.5"
-            style={{ background: '#d83000' }}>
+            className="btn-primary-lg disabled:opacity-60 disabled:cursor-not-allowed">
             {loading ? 'Procesando...' : isLogin ? 'Iniciar Sesión' : 'Registrarse'}
           </button>
         </form>
 
         <div ref={googleButtonRef} className="mt-4 flex justify-center" />
 
-        <Link href="/" className="block text-center mt-6 font-semibold no-underline" style={{ color: '#7a4a1b' }}>
+        <Link href="/" className="block text-center mt-6 font-semibold no-underline text-muted">
           ← Volver al inicio
         </Link>
       </div>

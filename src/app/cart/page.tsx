@@ -102,9 +102,9 @@ export default function CartPage() {
     return (
       <div className="px-[5vw] py-8 max-w-[1400px] mx-auto">
         <h1 className="m-0 mb-8 text-4xl">Carrito de Compras</h1>
-        <div className="text-center py-16 px-8 bg-white border-[3px] border-black rounded-[24px]">
-          <p className="text-lg mb-8" style={{ color: '#7a4a1b' }}>Tu carrito está vacío</p>
-          <button type="button" className="py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#d83000' }} onClick={() => router.push('/')}>
+        <div className="card text-center py-16 px-8">
+          <p className="text-lg mb-8 text-muted">Tu carrito está vacío</p>
+          <button type="button" className="btn-primary" onClick={() => router.push('/')}>
             Explorar Cartas
           </button>
         </div>
@@ -143,8 +143,8 @@ export default function CartPage() {
       <div className="grid gap-8" style={{ gridTemplateColumns: '2fr 1fr' }}>
         <div className="flex flex-col gap-4">
           {cart.map((item) => (
-            <div key={item.id} className="grid gap-6 items-center bg-white border-[3px] border-black rounded-[20px] p-6" style={{ gridTemplateColumns: '120px 1fr auto auto' }}>
-              <div className="w-[120px] h-[120px] rounded-xl flex items-center justify-center overflow-hidden" style={{ background: '#fef7e7' }}>
+            <div key={item.id} className="card-sm grid gap-6 items-center p-6" style={{ gridTemplateColumns: '120px 1fr auto auto' }}>
+              <div className="w-[120px] h-[120px] rounded-xl flex items-center justify-center overflow-hidden bg-card">
                 <img
                   src={item.image || FALLBACK_CARD_IMAGE}
                   alt={item.name}
@@ -154,22 +154,19 @@ export default function CartPage() {
               </div>
               <div className="flex flex-col gap-2">
                 <h3 className="m-0 text-xl">{item.name}</h3>
-                <p className="m-0 text-sm" style={{ color: '#7a4a1b' }}>{formatCurrency(item.price)}</p>
+                <p className="m-0 text-sm text-muted">{formatCurrency(item.price)}</p>
               </div>
               <div className="flex flex-col gap-3 items-center">
-                <div className="flex items-center gap-3 rounded-full border-2 border-black p-1.5" style={{ background: '#fef7e7' }}>
+                <div className="flex items-center gap-3 rounded-full border-2 border-black p-1.5 bg-card">
                   <button type="button" onClick={() => updateQuantity(item.id, item.qty - 1)} className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center font-bold cursor-pointer hover:bg-[#d83000] hover:text-white transition-colors duration-200">−</button>
                   <span className="font-bold min-w-[30px] text-center">{item.qty}</span>
                   <button type="button" onClick={() => updateQuantity(item.id, item.qty + 1)} className="w-8 h-8 rounded-full border-2 border-black bg-white flex items-center justify-center font-bold cursor-pointer hover:bg-[#d83000] hover:text-white transition-colors duration-200">+</button>
                 </div>
-                <button type="button" onClick={() => removeFromCart(item.id)} className="px-3 py-1.5 rounded-full text-sm font-semibold cursor-pointer border-2 transition-colors duration-200 hover:text-white" style={{ borderColor: '#d83000', color: '#d83000', background: '#fff' }}
-                  onMouseEnter={(e) => { e.currentTarget.style.background = '#d83000'; e.currentTarget.style.color = '#fff' }}
-                  onMouseLeave={(e) => { e.currentTarget.style.background = '#fff'; e.currentTarget.style.color = '#d83000' }}
-                >
+                <button type="button" onClick={() => removeFromCart(item.id)} className="btn-danger-soft">
                   Eliminar
                 </button>
               </div>
-              <div className="text-xl font-bold text-right" style={{ color: '#d83000' }}>
+              <div className="text-xl font-bold text-right text-accent">
                 {formatCurrency(parseFloat(String(item.price)) * item.qty)}
               </div>
             </div>
@@ -177,7 +174,7 @@ export default function CartPage() {
         </div>
 
         <div className="sticky top-8 h-fit">
-          <div className="bg-white border-[3px] border-black rounded-[24px] p-8">
+          <div className="card p-8">
             <h2 className="m-0 mb-6 text-2xl">Resumen</h2>
             {addressHint}
             <div className="flex justify-between mb-4 text-base">
@@ -189,21 +186,20 @@ export default function CartPage() {
               <span>Gratis</span>
             </div>
             <div className="h-0.5 bg-black my-4"></div>
-            <div className="flex justify-between mb-4 text-2xl font-bold" style={{ color: '#d83000' }}>
+            <div className="flex justify-between mb-4 text-2xl font-bold text-accent">
               <span>Total</span>
               <span>{formatCurrency(cartTotal())}</span>
             </div>
             <button
               type="button"
-              className="w-full mt-6 py-4 px-8 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white text-lg transition-transform duration-200 hover:-translate-y-0.5 disabled:opacity-60 disabled:cursor-not-allowed"
-              style={{ background: '#d83000' }}
+              className="btn-primary-lg w-full mt-6 disabled:opacity-60 disabled:cursor-not-allowed"
               onClick={handleCheckout}
               disabled={processing}
             >
               {processing ? 'Procesando...' : 'Pagar ahora'}
             </button>
             {!isAuthenticated() && (
-              <p className="mt-4 text-sm text-center" style={{ color: '#7a4a1b' }}>
+              <p className="mt-4 text-sm text-center text-muted">
                 Debes iniciar sesión para continuar
               </p>
             )}

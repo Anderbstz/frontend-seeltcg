@@ -119,11 +119,11 @@ function HistoryContent() {
 
   if (!isAuthenticated()) {
     return (
-      <div className="px-[5vw] py-8 max-w-[1200px] mx-auto">
-        <div className="bg-white border-[3px] border-black rounded-[20px] p-6">
+      <div className="page-container-md">
+        <div className="card-sm p-6">
           <h1 className="text-3xl m-0 mb-4">Historial de compras</h1>
           <p className="py-4 font-semibold text-center">Debes iniciar sesión para ver tu historial.</p>
-          <button type="button" className="block mx-auto py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#d83000' }} onClick={() => router.push('/login')}>
+          <button type="button" className="btn-primary block mx-auto" onClick={() => router.push('/login')}>
             Iniciar sesión
           </button>
         </div>
@@ -132,7 +132,7 @@ function HistoryContent() {
   }
 
   return (
-    <div className="px-[5vw] py-8 max-w-[1200px] mx-auto" style={{ '--history-img-size': imgSizeVar } as React.CSSProperties}>
+    <div className="page-container-md" style={{ '--history-img-size': imgSizeVar } as React.CSSProperties}>
       <div className="flex justify-between items-center mb-6">
         <h1 className="m-0 text-3xl">Historial de compras</h1>
         <button type="button" className="px-4 py-2 rounded-full font-semibold cursor-pointer border-2 border-black bg-white hover:bg-[#d83000] hover:text-white transition-colors duration-200" onClick={() => router.back()}>
@@ -140,7 +140,7 @@ function HistoryContent() {
         </button>
       </div>
 
-      <div className="bg-white border-[3px] border-black rounded-[24px] p-4 mb-4 grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
+      <div className="card p-4 mb-4 grid gap-3" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))' }}>
         <div className="flex flex-col gap-1.5">
           <label className="font-semibold text-xs uppercase tracking-wider">Nombre de carta</label>
           <input type="text" placeholder="Buscar dentro del historial..." value={filters.q}
@@ -187,14 +187,14 @@ function HistoryContent() {
           {visibleOrders.length === 0 ? (
             <div className="bg-white border-[3px] border-black rounded-[20px] p-6">
               <p className="py-4 font-semibold text-center">No tienes compras registradas todavía.</p>
-              <button type="button" className="block mx-auto py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#d83000' }} onClick={() => router.push('/')}>Explorar cartas</button>
+              <button type="button" className="btn-primary block mx-auto" onClick={() => router.push('/')}>Explorar cartas</button>
             </div>
           ) : (
             visibleOrders.map((order) => (
               <div key={order.id} className="bg-white border-[3px] border-black rounded-[20px] p-5">
                 <div className="flex justify-between items-baseline">
                   <h2 className="m-0 text-xl">Orden #{order.id}</h2>
-                  <span className="text-sm" style={{ color: '#7a4a1b' }}>
+                  <span className="text-sm text-muted">
                     {order.created_at ? new Date(order.created_at).toLocaleString() : 'Fecha no disponible'}
                   </span>
                 </div>
@@ -206,13 +206,13 @@ function HistoryContent() {
                       </div>
                       <div className="flex gap-2 items-baseline">
                         <strong>{item.product_name}</strong>
-                        <span className="text-sm" style={{ color: '#7a4a1b' }}>Cantidad: {item.quantity}</span>
+                        <span className="text-sm text-muted">Cantidad: {item.quantity}</span>
                       </div>
                       <div className="font-semibold">{formatCurrency(item.price)}</div>
                     </div>
                   ))}
                 </div>
-                <div className="flex justify-between items-center text-white border-[3px] border-black rounded-[16px] px-4 py-2.5 mt-4" style={{ background: '#d83000' }}>
+                <div className="total-bar mt-4">
                   <span>Total</span>
                   <strong>{formatCurrency(order.total)}</strong>
                 </div>
@@ -227,7 +227,7 @@ function HistoryContent() {
 
 export default function HistoryPage() {
   return (
-    <Suspense fallback={<div className="px-[5vw] py-8 max-w-[1200px] mx-auto"><p className="py-8 font-semibold text-center">Cargando...</p></div>}>
+    <Suspense fallback={<div className="page-container-md"><p className="status-msg">Cargando...</p></div>}>
       <HistoryContent />
     </Suspense>
   )

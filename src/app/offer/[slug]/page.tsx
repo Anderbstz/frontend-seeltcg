@@ -96,31 +96,31 @@ export default function OfferPage() {
 
   if (!offer) {
     return (
-      <div className="px-[5vw] py-8">
-        <p className="py-8 font-semibold text-center" style={{ color: '#d83000' }}>Oferta no encontrada</p>
-        <button type="button" className="block mx-auto py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#d83000' }} onClick={() => router.push('/')}>Volver al inicio</button>
+      <div className="page-container">
+        <p className="status-msg text-accent">Oferta no encontrada</p>
+        <button type="button" className="btn-primary block mx-auto" onClick={() => router.push('/')}>Volver al inicio</button>
       </div>
     )
   }
 
   return (
-    <div className="px-[5vw] py-8">
-      <button type="button" className="mb-8 px-5 py-2.5 rounded-full font-semibold cursor-pointer border-2 border-black bg-white hover:bg-[#d83000] hover:text-white transition-colors duration-200" onClick={() => router.back()}>
+    <div className="page-container">
+      <button type="button" className="btn-outline mb-8" onClick={() => router.back()}>
         ← Volver
       </button>
 
       <div className="mb-6">
-        <p className="text-xs uppercase tracking-wider m-0" style={{ color: '#d83000' }}>{offer.combo}</p>
+        <p className="text-xs uppercase tracking-wider m-0 text-accent">{offer.combo}</p>
         <h1 className="m-2 text-[clamp(1.5rem,2vw,2.2rem)]" style={{ fontFamily: "'Press Start 2P', cursive" }}>{offer.title}</h1>
-        <p className="text-base" style={{ color: '#7a4a1b' }}>{offer.subtitle}</p>
-        <p className="text-sm" style={{ color: '#7a4a1b' }}>
+        <p className="text-base text-muted">{offer.subtitle}</p>
+        <p className="text-sm text-muted">
           Incluye: {(offer.includes || ['2 cartas originales', 'Toploader', 'Sleeves premium']).slice(0, 3).join(', ')}.{' '}
           <strong>Stock limitado — ¡aprovecha el combo ahora!</strong>
         </p>
       </div>
 
-      {loading && <p className="py-8 font-semibold text-center">Cargando oferta...</p>}
-      {error && !loading && <p className="py-8 font-semibold text-center" style={{ color: '#d83000' }}>{error}</p>}
+      {loading && <p className="status-msg">Cargando oferta...</p>}
+      {error && !loading && <p className="status-msg text-accent">{error}</p>}
 
       {!loading && !error && (
         <div className="grid gap-6 rounded-[28px] border-4 border-black p-6 justify-items-center" style={{ gridTemplateColumns: '1.7fr 0.5fr', background: '#fce3b8' }}>
@@ -138,11 +138,11 @@ export default function OfferPage() {
                 </div>
               ))}
             </div>
-            <div className="flex justify-between items-center text-white border-[3px] border-black rounded-[20px] px-4 py-3" style={{ background: '#d83000' }}>
+            <div className="total-bar">
               <span>Total</span>
               <strong>{formatCurrency(totalPrice)}</strong>
             </div>
-            <button type="button" className="py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white transition-transform duration-200 hover:-translate-y-0.5" style={{ background: '#d83000' }} onClick={handleBuy}>
+            <button type="button" className="btn-primary" onClick={handleBuy}>
               Comprar ahora
             </button>
           </aside>

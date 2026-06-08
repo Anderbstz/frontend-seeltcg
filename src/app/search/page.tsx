@@ -150,14 +150,14 @@ function SearchContent() {
         <h1 className="m-0 text-4xl">Búsqueda de Cartas</h1>
         <button
           type="button"
-          className="px-5 py-2.5 rounded-full font-semibold cursor-pointer border-2 border-black bg-white hover:bg-[#d83000] hover:text-white transition-colors duration-200"
+          className="btn-outline"
           onClick={() => setAdvancedMode(!advancedMode)}
         >
           {advancedMode ? 'Búsqueda Simple' : 'Búsqueda Avanzada'}
         </button>
       </div>
 
-      <form onSubmit={handleSubmit} className="bg-white border-[3px] border-black rounded-[24px] p-8 mb-8">
+      <form onSubmit={handleSubmit} className="card p-8 mb-8">
         {!advancedMode ? (
           <div className="flex gap-4">
             <input
@@ -168,7 +168,7 @@ function SearchContent() {
               className="flex-1 border-2 border-black rounded-full px-6 py-3 text-base"
               style={{ fontFamily: "'Space Grotesk', sans-serif", outline: 'none' }}
             />
-            <button type="submit" className="py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white" style={{ background: '#d83000' }}>
+            <button type="submit" className="btn-primary">
               Buscar
             </button>
           </div>
@@ -178,19 +178,19 @@ function SearchContent() {
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-sm uppercase tracking-wider">Nombre</label>
                 <input type="text" value={name} onChange={(e) => setName(e.target.value)} placeholder="Nombre de la carta"
-                  className="border-2 border-black rounded-lg p-3 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
+                  className="input-field" />
               </div>
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-sm uppercase tracking-wider">Artista</label>
                 <input type="text" value={artist} onChange={(e) => setArtist(e.target.value)} placeholder="Nombre del artista"
-                  className="border-2 border-black rounded-lg p-3 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
+                  className="input-field" />
               </div>
             </div>
             <div className="grid gap-4" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))' }}>
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-sm uppercase tracking-wider">Tipo</label>
                 <select value={type} onChange={(e) => setType(e.target.value)}
-                  className="border-2 border-black rounded-lg p-3 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  className="input-field">
                   <option value="">Todos</option>
                   {types.map((t) => <option key={t} value={t}>{t}</option>)}
                 </select>
@@ -198,7 +198,7 @@ function SearchContent() {
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-sm uppercase tracking-wider">Rareza</label>
                 <select value={rarity} onChange={(e) => setRarity(e.target.value)}
-                  className="border-2 border-black rounded-lg p-3 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  className="input-field">
                   <option value="">Todas</option>
                   {rarities.map((r) => <option key={r} value={r}>{r}</option>)}
                 </select>
@@ -206,29 +206,29 @@ function SearchContent() {
               <div className="flex flex-col gap-2">
                 <label className="font-semibold text-sm uppercase tracking-wider">Set</label>
                 <select value={selectedSet} onChange={(e) => setSelectedSet(e.target.value)}
-                  className="border-2 border-black rounded-lg p-3 text-base" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>
+                  className="input-field">
                   <option value="">Todos</option>
                   {sets.map((s) => <option key={s} value={s}>{s}</option>)}
                 </select>
               </div>
             </div>
-            <button type="submit" className="py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white self-start" style={{ background: '#d83000' }}>
+            <button type="submit" className="btn-primary self-start">
               Buscar
             </button>
           </div>
         )}
       </form>
 
-      {loading && <p className="py-8 font-semibold text-center">Buscando cartas...</p>}
-      {error && !loading && <p className="py-8 font-semibold text-center" style={{ color: '#d83000' }}>{error}</p>}
+      {loading && <p className="status-msg">Buscando cartas...</p>}
+      {error && !loading && <p className="status-msg text-accent">{error}</p>}
       {!loading && !error && cards.length === 0 && (query || advancedMode) && (
-        <p className="py-8 font-semibold text-center">No se encontraron cartas.</p>
+        <p className="status-msg">No se encontraron cartas.</p>
       )}
 
       {cards.length > 0 && (
         <div className="mt-8">
           <h2 className="mb-6 text-2xl">{cards.length} resultados encontrados</h2>
-          <div className="grid gap-6" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+          <div className="grid-cards">
             {cards.map((card: any) => <Card key={card.id} card={card} />)}
           </div>
         </div>
@@ -239,7 +239,7 @@ function SearchContent() {
 
 export default function SearchPage() {
   return (
-    <Suspense fallback={<div className="px-[5vw] py-8 max-w-[1400px] mx-auto"><p className="py-8 font-semibold text-center">Cargando...</p></div>}>
+    <Suspense fallback={<div className="px-[5vw] py-8 max-w-[1400px] mx-auto"><p className="status-msg">Cargando...</p></div>}>
       <SearchContent />
     </Suspense>
   )

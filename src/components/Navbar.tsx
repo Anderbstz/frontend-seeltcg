@@ -173,11 +173,11 @@ export default function Navbar() {
   return (
     <nav className="flex flex-wrap gap-3 items-center px-[5vw] py-7 min-h-[7rem]" style={{ background: '#f0d088' }}>
       <div className="min-w-[180px]">
-        <Link href="/" className="flex flex-row items-center gap-1 no-underline" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '1.15rem', color: '#d83000' }}>
+        <Link href="/" className="flex flex-row items-center gap-1 no-underline text-accent" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '1.15rem' }}>
           <img src="/Icon_SeaTgc.png" alt="SeaTGC Logo" className="w-11 h-11 rounded-md object-contain" />
           <div className="flex flex-col gap-0.5">
             <span>PikaCards</span>
-            <small className="text-xs tracking-wider" style={{ fontFamily: "'Space Grotesk', sans-serif", color: '#7a4a1b' }}>TCG Retro Store</small>
+            <small className="text-xs tracking-wider text-muted" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>TCG Retro Store</small>
           </div>
         </Link>
       </div>
@@ -197,7 +197,7 @@ export default function Navbar() {
           {menuOpen && (
             <div className="absolute z-30 top-full left-0 mt-2 bg-white border-[3px] border-black rounded-[20px] p-6 shadow-[10px_10px_0_#00000020]" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(140px, 1fr))', gap: '1.5rem', minWidth: '320px' }}>
               <div>
-                <p className="uppercase text-xs tracking-wider mb-1" style={{ color: '#7a4a1b' }}>Tipos</p>
+                <p className="uppercase text-xs tracking-wider mb-1 text-muted">Tipos</p>
                 <ul className="list-none p-0 m-0 flex flex-col gap-1">
                   {types.map((type) => (
                     <li key={type}>
@@ -216,7 +216,7 @@ export default function Navbar() {
                 </ul>
               </div>
               <div>
-                <p className="uppercase text-xs tracking-wider mb-1" style={{ color: '#7a4a1b' }}>Rarezas</p>
+                <p className="uppercase text-xs tracking-wider mb-1 text-muted">Rarezas</p>
                 <ul className="list-none p-0 m-0 flex flex-col gap-1">
                   {rarities.map((rarity) => (
                     <li key={rarity}>
@@ -257,7 +257,7 @@ export default function Navbar() {
           {showSearchPanel && (
             <div className="absolute top-full left-0 w-full bg-white border-[3px] border-black rounded-[20px] shadow-[12px_12px_0_#00000025] z-40 p-4 mt-2">
               {searchLoading && <p className="font-semibold mb-3">Buscando...</p>}
-              {searchError && <p className="font-semibold mb-3" style={{ color: '#d83000' }}>{searchError}</p>}
+              {searchError && <p className="font-semibold mb-3 text-accent">{searchError}</p>}
               {!searchLoading && !searchError && searchResults.length === 0 && searchTerm.length > 1 && (
                 <p className="font-semibold mb-3">Sin resultados</p>
               )}
@@ -272,17 +272,17 @@ export default function Navbar() {
                     <img src={getCardImage(card)} alt={card.name} className="w-12 h-16 object-contain" />
                     <div>
                       <strong className="block text-sm">{card.name}</strong>
-                      <span className="text-xs" style={{ color: '#7a4a1b' }}>{getCardSetName(card)}</span>
+                      <span className="text-xs text-muted">{getCardSetName(card)}</span>
                     </div>
-                    <span className="font-bold text-sm" style={{ color: '#d83000' }}>{formatCurrency(getCardPrice(card))}</span>
+                    <span className="font-bold text-sm text-accent">{formatCurrency(getCardPrice(card))}</span>
                   </li>
                 ))}
               </ul>
               {searchResults.length > 0 && (
                 <button
                   type="button"
-                  className="w-full mt-4 py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white transition-transform duration-200 hover:-translate-y-0.5"
-                  style={{ background: '#d83000', boxShadow: '0 4px 12px rgba(216,48,0,0.3)' }}
+                  className="btn-primary w-full mt-4"
+                  style={{ boxShadow: '0 4px 12px rgba(216,48,0,0.3)' }}
                   onClick={handleGoToSearchPage}
                 >
                   Ver todos los resultados
@@ -303,6 +303,13 @@ export default function Navbar() {
               )}
             </button>
           </Link>
+          {isAuthenticated() && auth?.user?.role === 'ROLE_ADMIN' && (
+            <Link href="/admin" className="no-underline">
+              <button type="button" className="rounded-full cursor-pointer border-2 border-black bg-white px-3 py-2 text-base font-semibold" aria-label="Admin">
+                Admin
+              </button>
+            </Link>
+          )}
           <div className="relative" ref={profileRef}>
             {isAuthenticated() ? (
               <>
@@ -314,7 +321,7 @@ export default function Navbar() {
                   title={auth?.user?.username ? `Perfil de ${auth.user.username}` : 'Perfil'}
                 >
                   {avatar ? (
-                    <span className="w-9 h-9 rounded-full border-2 border-black overflow-hidden inline-flex items-center justify-center" style={{ background: '#fff1c7' }}>
+                    <span className="w-9 h-9 rounded-full border-2 border-black overflow-hidden inline-flex items-center justify-center bg-filter">
                       <img src={avatar} alt="Avatar" className="w-full h-full object-cover rounded-full" />
                     </span>
                   ) : (
@@ -324,9 +331,9 @@ export default function Navbar() {
                 </button>
                 {showProfilePanel && (
                   <div className="absolute z-30 top-full right-0 mt-2 bg-white border-[3px] border-black rounded-[20px] p-3 min-w-[220px] shadow-[10px_10px_0_#00000020] flex flex-col gap-1">
-                    <button type="button" className="w-full border-2 border-black rounded-xl px-3 py-2 bg-[#fff1c7] cursor-pointer text-left font-semibold hover:bg-[#d83000] hover:text-white" onClick={handleGoProfile}>Mi Perfil</button>
-                    <button type="button" className="w-full border-2 border-black rounded-xl px-3 py-2 bg-[#fff1c7] cursor-pointer text-left font-semibold hover:bg-[#d83000] hover:text-white" onClick={handleGoHistory}>Historial</button>
-                    <button type="button" className="w-full border-2 border-black rounded-xl px-3 py-2 bg-[#fff1c7] cursor-pointer text-left font-semibold hover:bg-[#d83000] hover:text-white" onClick={handleLogout}>Cerrar sesión</button>
+                    <button type="button" className="w-full border-2 border-black rounded-xl px-3 py-2 bg-filter cursor-pointer text-left font-semibold hover:bg-[#d83000] hover:text-white" onClick={handleGoProfile}>Mi Perfil</button>
+                    <button type="button" className="w-full border-2 border-black rounded-xl px-3 py-2 bg-filter cursor-pointer text-left font-semibold hover:bg-[#d83000] hover:text-white" onClick={handleGoHistory}>Historial</button>
+                    <button type="button" className="w-full border-2 border-black rounded-xl px-3 py-2 bg-filter cursor-pointer text-left font-semibold hover:bg-[#d83000] hover:text-white" onClick={handleLogout}>Cerrar sesión</button>
                   </div>
                 )}
               </>

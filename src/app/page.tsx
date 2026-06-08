@@ -141,10 +141,10 @@ export default function Home() {
               style={{ gridTemplateColumns: '1fr 1fr' }}
             >
               <div>
-                <p className="text-xs uppercase tracking-wider m-0" style={{ color: '#d83000' }}>{slide.combo}</p>
+                <p className="text-xs uppercase tracking-wider m-0 text-accent">{slide.combo}</p>
                 <h1 className="m-2 text-[clamp(1.5rem,2vw,2.2rem)]" style={{ fontFamily: "'Press Start 2P', cursive" }}>{slide.title}</h1>
-                <p className="text-base mb-4" style={{ color: '#7a4a1b' }}>{slide.subtitle}</p>
-                <p className="text-sm my-2 mb-4" style={{ color: '#7a4a1b' }}>
+                <p className="text-base mb-4 text-muted">{slide.subtitle}</p>
+                <p className="text-sm my-2 mb-4 text-muted">
                   Incluye: {(slide.includes || []).join(', ')}.{' '}
                   <strong>Stock limitado — ¡aprovecha el combo!</strong>
                 </p>
@@ -156,7 +156,7 @@ export default function Home() {
                 <div className="flex items-center gap-4">
                   <span className="py-3 px-4 rounded-[14px] font-bold border-3 border-black" style={{ background: '#d83000', color: '#fff' }}>{slide.priceLabel}</span>
                   <Link href={slide.offerSlug ? `/offer/${encodeURIComponent(slide.offerSlug)}` : '/'}>
-                    <button type="button" className="py-2.5 px-5 rounded-[18px] font-bold uppercase cursor-pointer border-[3px] border-black text-white transition-all duration-200 hover:-translate-y-0.5" style={{ background: '#d83000' }}>
+                    <button type="button" className="btn-primary">
                       Comprar ahora
                     </button>
                   </Link>
@@ -184,19 +184,19 @@ export default function Home() {
         </div>
         <aside className="hidden md:flex flex-col gap-4">
           <div className="bg-white border-[3px] border-black rounded-[20px] p-6">
-            <p className="m-0 text-sm" style={{ color: '#7a4a1b' }}>Entrega promedio</p>
-            <strong className="block text-2xl my-1" style={{ color: '#d83000' }}>30 min</strong>
-            <small className="block text-xs" style={{ color: '#7a4a1b' }}>Solo Lima</small>
+            <p className="m-0 text-sm text-muted">Entrega promedio</p>
+            <strong className="block text-2xl my-1 text-accent">30 min</strong>
+            <small className="block text-xs text-muted">Solo Lima</small>
           </div>
           <div className="bg-white border-[3px] border-black rounded-[20px] p-6">
-            <p className="m-0 text-sm" style={{ color: '#7a4a1b' }}>Cartas activas</p>
-            <strong className="block text-2xl my-1" style={{ color: '#d83000' }}>{cards.length || '—'}</strong>
-            <small className="block text-xs" style={{ color: '#7a4a1b' }}>Actualizado en vivo</small>
+            <p className="m-0 text-sm text-muted">Cartas activas</p>
+            <strong className="block text-2xl my-1 text-accent">{cards.length || '—'}</strong>
+            <small className="block text-xs text-muted">Actualizado en vivo</small>
           </div>
           <div className="bg-white border-[3px] border-black rounded-[20px] p-6">
-            <p className="m-0 text-sm" style={{ color: '#7a4a1b' }}>Protección</p>
-            <strong className="block text-2xl my-1" style={{ color: '#d83000' }}>Toploader</strong>
-            <small className="block text-xs" style={{ color: '#7a4a1b' }}>Incluida en combos</small>
+            <p className="m-0 text-sm text-muted">Protección</p>
+            <strong className="block text-2xl my-1 text-accent">Toploader</strong>
+            <small className="block text-xs text-muted">Incluida en combos</small>
           </div>
         </aside>
       </section>
@@ -221,18 +221,18 @@ export default function Home() {
         <div className="flex justify-between items-baseline mb-6">
           <div>
             <h2 className="m-0 text-3xl">Cartas destacadas</h2>
-            <p className="m-1 mt-1 text-sm" style={{ color: '#7a4a1b' }}>Basado en datos locales de PikaCards</p>
+            <p className="m-1 mt-1 text-sm text-muted">Basado en datos locales de PikaCards</p>
           </div>
-          <span className="text-sm" style={{ color: '#7a4a1b' }}>{cards.length} resultados</span>
+          <span className="text-sm text-muted">{cards.length} resultados</span>
         </div>
 
-        {loading && <p className="py-8 font-semibold text-center">Cargando cartas...</p>}
-        {error && !loading && <p className="py-8 font-semibold text-center" style={{ color: '#d83000' }}>{error}</p>}
+        {loading && <p className="status-msg">Cargando cartas...</p>}
+        {error && !loading && <p className="status-msg text-accent">{error}</p>}
         {!loading && !error && cards.length === 0 && (
-          <p className="py-8 font-semibold text-center">No encontramos cartas.</p>
+          <p className="status-msg">No encontramos cartas.</p>
         )}
 
-        <div className="grid gap-6 mb-8" style={{ gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))' }}>
+        <div className="grid-cards mb-8">
           {!loading && !error && cards.map((card: any) => <Card key={card.id} card={card} />)}
         </div>
 
@@ -242,7 +242,7 @@ export default function Home() {
               type="button"
               onClick={() => handlePageChange(currentPage - 1)}
               disabled={currentPage === 1}
-              className="px-5 py-2.5 rounded-full font-semibold cursor-pointer border-2 border-black bg-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#d83000] hover:text-white"
+              className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
             >
               ← Anterior
             </button>
@@ -253,7 +253,7 @@ export default function Home() {
               type="button"
               onClick={() => handlePageChange(currentPage + 1)}
               disabled={currentPage >= totalPages}
-              className="px-5 py-2.5 rounded-full font-semibold cursor-pointer border-2 border-black bg-white transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#d83000] hover:text-white"
+              className="btn-outline disabled:opacity-50 disabled:cursor-not-allowed"
             >
               Siguiente →
             </button>
