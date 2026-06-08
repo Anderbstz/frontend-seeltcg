@@ -31,7 +31,7 @@ export const useCart = () => {
   return context
 }
 
-const CART_STORAGE_KEY = 'pikacards_cart'
+const CART_STORAGE_KEY = 'seatcg_cart'
 
 export const CartProvider = ({ children }: { children: ReactNode }) => {
   const [cart, setCart] = useState<CartItem[]>([])

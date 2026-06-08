@@ -30,7 +30,7 @@ export interface AdminCard {
 
 const getHeaders = (): ApiHeaders => {
   try {
-    const stored = localStorage.getItem('pikacards_auth')
+    const stored = localStorage.getItem('seatcg_auth')
     if (stored) {
       const parsed = JSON.parse(stored)
       if (parsed?.token) {

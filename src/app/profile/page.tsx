@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { API_URL, AUTH_URL } from '@/lib/config'
 
-const PREF_IMG_SIZE_KEY = 'pikacards_pref_history_img_size'
+const PREF_IMG_SIZE_KEY = 'seatcg_pref_history_img_size'
 const PREF_IMG_SIZE_MAP: Record<string, number> = { small: 96, medium: 140, large: 180 }
 
 const provinces = [
@@ -31,7 +31,7 @@ export default function ProfilePage() {
   // Load saved profile from localStorage
   useEffect(() => {
     try {
-      const key = `pikacards_profile_${auth?.user?.username || 'default'}`
+      const key = `seatcg_profile_${auth?.user?.username || 'default'}`
       const saved = localStorage.getItem(key)
       if (saved) {
         const parsed = JSON.parse(saved)
@@ -48,7 +48,7 @@ export default function ProfilePage() {
 
   const saveProfileLocal = () => {
     try {
-      const key = `pikacards_profile_${auth?.user?.username || 'default'}`
+      const key = `seatcg_profile_${auth?.user?.username || 'default'}`
       localStorage.setItem(key, JSON.stringify(profileData))
       setStatusMsg('Datos de perfil guardados localmente')
       setTimeout(() => setStatusMsg(''), 3000)

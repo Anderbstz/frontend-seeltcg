@@ -188,7 +188,7 @@ export default function Home() {
         <div className="flex justify-between items-baseline mb-6">
           <div>
             <h2 className="m-0 text-3xl">Cartas destacadas</h2>
-            <p className="m-1 mt-1 text-sm text-muted">Basado en datos locales de PikaCards</p>
+            <p className="m-1 mt-1 text-sm text-muted">Basado en datos locales de Seatcg</p>
           </div>
           <span className="text-sm text-muted">{cards.length} resultados</span>
         </div>

@@ -14,7 +14,7 @@ const ChatBubble = () => {
   const [isOpen, setIsOpen] = useState(false)
   const [message, setMessage] = useState('')
   const [messages, setMessages] = useState<ChatMessage[]>([
-    { text: '¡Hola! Soy SeaTgc, tu asistente de PikaCards. ¿En qué puedo ayudarte hoy?', sender: 'bot' }
+    { text: '¡Hola! Soy Seatcg, tu asistente. ¿En qué puedo ayudarte hoy?', sender: 'bot' }
   ])
   const [escribiendo, setEscribiendo] = useState(false)
   const [userAvatar, setUserAvatar] = useState('')
@@ -28,7 +28,7 @@ const ChatBubble = () => {
       try {
         const username = auth?.user?.username
         if (username) {
-          const key = `pikacards_profile_${username}`
+          const key = `seatcg_profile_${username}`
           const saved = localStorage.getItem(key)
           if (saved) {
             const parsed = JSON.parse(saved)
@@ -42,7 +42,7 @@ const ChatBubble = () => {
     }
     loadUserAvatar()
     const handleStorageChange = (e: StorageEvent) => {
-      if (e.key && e.key.startsWith('pikacards_profile_')) loadUserAvatar()
+      if (e.key && e.key.startsWith('seatcg_profile_')) loadUserAvatar()
     }
     window.addEventListener('storage', handleStorageChange)
     return () => window.removeEventListener('storage', handleStorageChange)
@@ -108,9 +108,9 @@ const ChatBubble = () => {
           {/* Header */}
           <div className="p-4 flex justify-between items-center text-white" style={{ background: 'linear-gradient(135deg, #FF6B35, #FF9E1F)' }}>
             <div className="flex items-center gap-2.5">
-              <img src="/Icon_SeaTgc.png" alt="SeaTgc" className="w-9 h-9 rounded-full object-cover" />
+              <img src="/Icon_Seatcg.png" alt="Seatcg" className="w-9 h-9 rounded-full object-cover" />
               <div>
-                <h3 className="m-0 text-base font-semibold">SeaTgc</h3>
+                <h3 className="m-0 text-base font-semibold">Seatcg</h3>
                 <p className="text-xs opacity-80 m-0">En línea</p>
               </div>
             </div>
@@ -124,7 +124,7 @@ const ChatBubble = () => {
             {messages.map((msg, index) => (
               <div key={index} className={`flex gap-2.5 max-w-[80%] ${msg.sender === 'bot' ? 'self-start' : 'self-end flex-row-reverse'}`}>
                 {msg.sender === 'bot' ? (
-                  <img src="/Icon_SeaTgc.png" alt="Bot" className="w-8 h-8 rounded-full object-cover flex-shrink-0 mt-auto" />
+                  <img src="/Icon_Seatcg.png" alt="Bot" className="w-8 h-8 rounded-full object-cover flex-shrink-0 mt-auto" />
                 ) : (
                   <div className="w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 mt-auto overflow-hidden" style={{ backgroundColor: '#e2e8f0', color: '#64748b' }}>
                     {userAvatar ? (
@@ -146,7 +146,7 @@ const ChatBubble = () => {
 
             {escribiendo && (
               <div className="flex gap-2.5 self-start max-w-[80%]">
-                <img src="/Icon_SeaTgc.png" alt="Bot" className="w-8 h-8 rounded-full object-cover flex-shrink-0 mt-auto" />
+                <img src="/Icon_Seatcg.png" alt="Bot" className="w-8 h-8 rounded-full object-cover flex-shrink-0 mt-auto" />
                 <div className="flex gap-1 px-3.5 py-2.5 bg-white rounded-[18px] w-fit shadow-sm">
                   <span className="w-2 h-2 rounded-full inline-block bg-[#94a3b8] animate-bounce" style={{ animationDelay: '-0.32s' }}></span>
                   <span className="w-2 h-2 rounded-full inline-block bg-[#94a3b8] animate-bounce" style={{ animationDelay: '-0.16s' }}></span>
@@ -189,7 +189,7 @@ const ChatBubble = () => {
           className="fixed bottom-[30px] right-[30px] w-[60px] h-[60px] bg-transparent border-none cursor-pointer flex items-center justify-center z-[1000] p-0 transition-transform duration-300 hover:scale-110"
           onClick={() => setIsOpen(true)}
         >
-          <img src="/Icon_SeaTgc.png" alt="Chat" className="w-[60px] h-[60px] object-contain transition-transform duration-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:scale-105 hover:drop-shadow-[0_4px_12px_rgba(0,0,0,0.25)]" />
+          <img src="/Icon_Seatcg.png" alt="Chat" className="w-[60px] h-[60px] object-contain transition-transform duration-300 drop-shadow-[0_2px_8px_rgba(0,0,0,0.2)] hover:scale-105 hover:drop-shadow-[0_4px_12px_rgba(0,0,0,0.25)]" />
         </button>
       )}
     </div>

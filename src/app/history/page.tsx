@@ -80,7 +80,7 @@ function HistoryContent() {
   // Read image size preference
   useEffect(() => {
     try {
-      const pref = localStorage.getItem('pikacards_pref_history_img_size')
+      const pref = localStorage.getItem('seatcg_pref_history_img_size')
       const map: Record<string, string> = { small: '96px', medium: '140px', large: '180px' }
       if (pref && map[pref]) setImgSizeVar(map[pref])
     } catch {}

@@ -4,7 +4,7 @@ import { Providers } from './providers'
 import LayoutClient from './layout-client'
 
 export const metadata: Metadata = {
-  title: 'PikaCards - Tienda de Cartas Pokémon TCG',
+  title: 'Seatcg - Tienda de Cartas Pokémon TCG',
   description: 'Compra y vende cartas Pokémon TCG originales. Envíos a todo el Perú.',
 }
 

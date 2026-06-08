@@ -37,7 +37,7 @@ export const useAuth = () => {
   return context
 }
 
-const AUTH_STORAGE_KEY = 'pikacards_auth'
+const AUTH_STORAGE_KEY = 'seatcg_auth'
 
 const isTokenExpired = (token: string): boolean => {
   try {
@@ -129,7 +129,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
       // Save avatar
       if (data.user?.username && data.user?.avatar) {
         try {
-          const key = `pikacards_profile_${data.user.username}`
+          const key = `seatcg_profile_${data.user.username}`
           const existing = localStorage.getItem(key)
           if (!existing) {
             localStorage.setItem(key, JSON.stringify({ avatar: data.user.avatar }))

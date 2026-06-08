@@ -60,7 +60,7 @@ export default function Navbar() {
         const username = auth?.user?.username
         let nextAvatar = ''
         if (username) {
-          const key = `pikacards_profile_${username}`
+          const key = `seatcg_profile_${username}`
           const saved = localStorage.getItem(key)
           if (saved) {
             const parsed = JSON.parse(saved)
@@ -70,7 +70,7 @@ export default function Navbar() {
         if (!nextAvatar) {
           for (let i = 0; i < localStorage.length; i++) {
             const k = localStorage.key(i)
-            if (k && k.startsWith('pikacards_profile_')) {
+            if (k && k.startsWith('seatcg_profile_')) {
               try {
                 const val = JSON.parse(localStorage.getItem(k) || '{}')
                 if (val?.avatar) {
@@ -174,9 +174,9 @@ export default function Navbar() {
     <nav className="flex flex-wrap gap-3 items-center px-[5vw] py-7 min-h-[7rem]" style={{ background: '#f0d088' }}>
       <div className="min-w-[180px]">
         <Link href="/" className="flex flex-row items-center gap-1 no-underline text-accent" style={{ fontFamily: "'Press Start 2P', cursive", fontSize: '1.15rem' }}>
-          <img src="/Icon_SeaTgc.png" alt="SeaTGC Logo" className="w-11 h-11 rounded-md object-contain" />
+          <img src="/Icon_Seatcg.png" alt="Seatcg Logo" className="w-11 h-11 rounded-md object-contain" />
           <div className="flex flex-col gap-0.5">
-            <span>PikaCards</span>
+            <span>Seatcg</span>
             <small className="text-xs tracking-wider text-muted" style={{ fontFamily: "'Space Grotesk', sans-serif" }}>TCG Retro Store</small>
           </div>
         </Link>
@@ -192,7 +192,7 @@ export default function Navbar() {
             title="Categorías"
             onClick={() => setMenuOpen((prev) => !prev)}
           >
-            <FiGrid size={18} />
+            <FiGrid size={26} />
           </button>
           {menuOpen && (
             <div className="absolute z-30 top-full left-0 mt-2 bg-white border-[3px] border-black rounded-[20px] p-6 shadow-[10px_10px_0_#00000020]" style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(140px, 1fr))', gap: '1.5rem', minWidth: '320px' }}>
@@ -238,7 +238,13 @@ export default function Navbar() {
           )}
         </div>
 
-        <div className="w-full relative" ref={searchRef}>
+        {/* Mobile: search icon only — navigates to /search */}
+        <Link href="/search" className="md:hidden flex items-center justify-center w-[52px] h-[52px] rounded-full border-2 border-black bg-white">
+          <FiSearch size={26} />
+        </Link>
+
+        {/* Desktop: full search bar */}
+        <div className="hidden md:block w-full relative" ref={searchRef}>
           <form onSubmit={handleSearchSubmit} className="flex border-[3px] border-black rounded-full overflow-hidden bg-white">
             <input
               type="search"

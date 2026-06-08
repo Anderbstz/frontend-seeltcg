@@ -28,7 +28,7 @@ export default function CartPage() {
 
     // Validate shipping address
     try {
-      const authKey = `pikacards_profile_${(JSON.parse(localStorage.getItem('pikacards_auth') || '{}')?.user?.username) || 'default'}`
+      const authKey = `seatcg_profile_${(JSON.parse(localStorage.getItem('seatcg_auth') || '{}')?.user?.username) || 'default'}`
       const savedProfile = localStorage.getItem(authKey)
       const parsed = savedProfile ? JSON.parse(savedProfile) : {}
       const hasAddress = Boolean((parsed.address || '').trim())
@@ -115,7 +115,7 @@ export default function CartPage() {
   // Check if address is filled (for inline hint)
   let addressHint = null
   try {
-    const authKey = `pikacards_profile_${(JSON.parse(localStorage.getItem('pikacards_auth') || '{}')?.user?.username) || 'default'}`
+    const authKey = `seatcg_profile_${(JSON.parse(localStorage.getItem('seatcg_auth') || '{}')?.user?.username) || 'default'}`
     const savedProfile = localStorage.getItem(authKey)
     const parsed = savedProfile ? JSON.parse(savedProfile) : {}
     const hasAddress = Boolean((parsed.address || '').trim())
