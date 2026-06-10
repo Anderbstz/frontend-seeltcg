@@ -166,6 +166,7 @@ function SearchContent() {
               placeholder="Buscar carta, set o artista..."
               value={query}
               onChange={(e) => setQuery(e.target.value)}
+              maxLength={20}
               className="flex-1 border-2 border-black rounded-full px-6 py-3 text-base w-full"
               style={{ fontFamily: "'Space Grotesk', sans-serif", outline: 'none' }}
             />

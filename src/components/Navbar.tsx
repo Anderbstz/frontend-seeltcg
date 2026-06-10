@@ -249,6 +249,7 @@ export default function Navbar() {
               value={searchTerm}
               onChange={handleSearchChange}
               onFocus={() => setShowSearchPanel(true)}
+              maxLength={20}
               className="flex-1 border-none px-4 py-3 text-base bg-transparent min-w-0"
               style={{ fontFamily: "'Space Grotesk', sans-serif", outline: 'none' }}
             />

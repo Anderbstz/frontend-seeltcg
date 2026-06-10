@@ -169,10 +169,15 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
 
   const logout = () => setAuth(null)
 
+  // Auto-clear expired token
+  useEffect(() => {
+    if (auth?.token && isTokenExpired(auth.token)) {
+      setAuth(null)
+    }
+  }, [auth?.token])
+
   const isAuthenticated = () => {
-    if (!auth?.token) return false
-    if (isTokenExpired(auth.token)) { setAuth(null); return false }
-    return true
+    return !!(auth?.token && !isTokenExpired(auth.token))
   }
 
   const getAuthHeaders = (): Record<string, string> => {

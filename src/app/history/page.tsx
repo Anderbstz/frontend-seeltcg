@@ -145,29 +145,40 @@ function HistoryContent() {
           <label className="font-semibold text-xs uppercase tracking-wider">Nombre de carta</label>
           <input type="text" placeholder="Buscar dentro del historial..." value={filters.q}
             onChange={(e) => setFilters((f) => ({ ...f, q: e.target.value }))}
+            maxLength={20}
             className="border-2 border-black rounded-lg px-3 py-2 text-sm" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
         </div>
         <div className="flex flex-col gap-1.5">
           <label className="font-semibold text-xs uppercase tracking-wider">Total mín.</label>
-          <input type="number" min="0" value={filters.minTotal}
-            onChange={(e) => setFilters((f) => ({ ...f, minTotal: e.target.value }))}
+          <input type="number" min="0" max="999" value={filters.minTotal}
+            onChange={(e) => {
+              const val = e.target.value
+              if (val === '' || (Number(val) >= 0 && Number(val) <= 999)) {
+                setFilters((f) => ({ ...f, minTotal: val }))
+              }
+            }}
             className="border-2 border-black rounded-lg px-3 py-2 text-sm" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
         </div>
         <div className="flex flex-col gap-1.5">
           <label className="font-semibold text-xs uppercase tracking-wider">Total máx.</label>
-          <input type="number" min="0" value={filters.maxTotal}
-            onChange={(e) => setFilters((f) => ({ ...f, maxTotal: e.target.value }))}
+          <input type="number" min="0" max="999" value={filters.maxTotal}
+            onChange={(e) => {
+              const val = e.target.value
+              if (val === '' || (Number(val) >= 0 && Number(val) <= 999)) {
+                setFilters((f) => ({ ...f, maxTotal: val }))
+              }
+            }}
             className="border-2 border-black rounded-lg px-3 py-2 text-sm" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
         </div>
         <div className="flex flex-col gap-1.5">
           <label className="font-semibold text-xs uppercase tracking-wider">Desde</label>
-          <input type="date" value={filters.startDate}
+          <input type="date" min="2020-01-01" value={filters.startDate}
             onChange={(e) => setFilters((f) => ({ ...f, startDate: e.target.value }))}
             className="border-2 border-black rounded-lg px-3 py-2 text-sm" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
         </div>
         <div className="flex flex-col gap-1.5">
           <label className="font-semibold text-xs uppercase tracking-wider">Hasta</label>
-          <input type="date" value={filters.endDate}
+          <input type="date" value={filters.endDate} max="2050-12-31"
             onChange={(e) => setFilters((f) => ({ ...f, endDate: e.target.value }))}
             className="border-2 border-black rounded-lg px-3 py-2 text-sm" style={{ fontFamily: "'Space Grotesk', sans-serif" }} />
         </div>

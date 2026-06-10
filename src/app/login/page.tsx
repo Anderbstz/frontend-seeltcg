@@ -4,24 +4,72 @@ import { useState, useEffect, useRef } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { useAuth } from '@/contexts/AuthContext'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
 
 export default function LoginPage() {
   const router = useRouter()
   const { login, register, loginWithGoogle } = useAuth()
   const [isLogin, setIsLogin] = useState(true)
   const [formData, setFormData] = useState({ username: '', email: '', password: '' })
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+  const [showPassword, setShowPassword] = useState(false)
   const googleButtonRef = useRef<HTMLDivElement>(null)
   const initRef = useRef(false)
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
     setError('')
+    if (fieldErrors[e.target.name]) {
+      setFieldErrors((prev) => {
+        const copy = { ...prev }
+        delete copy[e.target.name]
+        return copy
+      })
+    }
+  }
+
+  const validate = (): boolean => {
+    const errors: Record<string, string> = {}
+
+    if (!formData.username.trim()) {
+      errors.username = 'El usuario es obligatorio'
+    } else if (formData.username.length > 20) {
+      errors.username = 'Máximo 20 caracteres'
+    }
+
+    if (!isLogin) {
+      if (!formData.email.trim()) {
+        errors.email = 'El email es obligatorio'
+      } else if (formData.email.length > 50) {
+        errors.email = 'Máximo 50 caracteres'
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email)) {
+        errors.email = 'Email inválido'
+      }
+
+      if (!formData.password) {
+        errors.password = 'La contraseña es obligatoria'
+      } else if (formData.password.length < 8) {
+        errors.password = 'Mínimo 8 caracteres'
+      } else if (!/(?=.*[0-9])/.test(formData.password)) {
+        errors.password = 'Debe tener al menos un número'
+      } else if (!/(?=.*[!@#$%^&*(),.?":{}|<>_\-+=\[\]])/.test(formData.password)) {
+        errors.password = 'Debe tener al menos un carácter especial'
+      }
+    } else {
+      if (!formData.password) {
+        errors.password = 'La contraseña es obligatoria'
+      }
+    }
+
+    setFieldErrors(errors)
+    return Object.keys(errors).length === 0
   }
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
+    if (!validate()) return
     setError('')
     setLoading(true)
     try {
@@ -126,6 +174,7 @@ export default function LoginPage() {
           onClick={() => {
             setIsLogin(!isLogin)
             setError('')
+            setFieldErrors({})
             setFormData({ username: '', email: '', password: '' })
           }}
         >
@@ -141,22 +190,30 @@ export default function LoginPage() {
         <form onSubmit={handleSubmit} className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
             <label htmlFor="username" className="font-semibold text-sm uppercase tracking-wider">Usuario</label>
-            <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} required placeholder="Tu nombre de usuario"
-              className="input-field outline-none" />
+            <input type="text" id="username" name="username" value={formData.username} onChange={handleChange} maxLength={20} required placeholder="Tu nombre de usuario"
+              className={`input-field outline-none ${fieldErrors.username ? 'border-red-500' : ''}`} />
+            {fieldErrors.username && <p className="text-accent text-xs m-0">{fieldErrors.username}</p>}
           </div>
 
           {!isLogin && (
             <div className="flex flex-col gap-2">
               <label htmlFor="email" className="font-semibold text-sm uppercase tracking-wider">Email</label>
-              <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} required placeholder="tu@email.com"
-                className="input-field outline-none" />
-          </div>
+              <input type="email" id="email" name="email" value={formData.email} onChange={handleChange} maxLength={50} required placeholder="tu@email.com"
+                className={`input-field outline-none ${fieldErrors.email ? 'border-red-500' : ''}`} />
+              {fieldErrors.email && <p className="text-accent text-xs m-0">{fieldErrors.email}</p>}
+            </div>
           )}
 
           <div className="flex flex-col gap-2">
             <label htmlFor="password" className="font-semibold text-sm uppercase tracking-wider">Contraseña</label>
-            <input type="password" id="password" name="password" value={formData.password} onChange={handleChange} required placeholder="••••••••"
-              className="input-field outline-none" />
+            <div className="relative">
+              <input type={showPassword ? 'text' : 'password'} id="password" name="password" value={formData.password} onChange={handleChange} required placeholder="••••••••"
+                className={`input-field outline-none w-full ${fieldErrors.password ? 'border-red-500' : ''}`} />
+              <button type="button" onClick={() => setShowPassword((prev) => !prev)} className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-muted hover:text-accent p-0" aria-label={showPassword ? 'Ocultar contraseña' : 'Mostrar contraseña'}>
+                {showPassword ? <FiEyeOff size={20} /> : <FiEye size={20} />}
+              </button>
+            </div>
+            {fieldErrors.password && <p className="text-accent text-xs m-0">{fieldErrors.password}</p>}
           </div>
 
           <button type="submit" disabled={loading}

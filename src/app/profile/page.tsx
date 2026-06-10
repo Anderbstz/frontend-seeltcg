@@ -4,6 +4,7 @@ import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import { useAuth } from '@/contexts/AuthContext'
 import { API_URL, AUTH_URL } from '@/lib/config'
+import { FiEye, FiEyeOff } from 'react-icons/fi'
 
 const PREF_IMG_SIZE_KEY = 'seatcg_pref_history_img_size'
 const PREF_IMG_SIZE_MAP: Record<string, number> = { small: 96, medium: 140, large: 180 }
@@ -20,6 +21,8 @@ export default function ProfilePage() {
   const [profileData, setProfileData] = useState({ province: '', address: '', avatar: '' })
   const [security, setSecurity] = useState({ current: '', next: '', confirm: '' })
   const [statusMsg, setStatusMsg] = useState('')
+  const [passwordErrors, setPasswordErrors] = useState<Record<string, string>>({})
+  const [showPwd, setShowPwd] = useState({ current: false, next: false, confirm: false })
 
   useEffect(() => {
     try {
@@ -94,8 +97,19 @@ export default function ProfilePage() {
   const changePassword = async (e: React.FormEvent) => {
     e.preventDefault()
     setStatusMsg('')
-    if (security.next !== security.confirm) {
-      setStatusMsg('La nueva contraseña no coincide')
+    setPasswordErrors({})
+
+    const errors: Record<string, string> = {}
+    if (!security.current) errors.current = 'La contraseña actual es obligatoria'
+    if (!security.next) errors.next = 'La nueva contraseña es obligatoria'
+    else if (security.next.length < 8) errors.next = 'Mínimo 8 caracteres'
+    else if (security.next.length > 20) errors.next = 'Máximo 20 caracteres'
+    else if (!/(?=.*[0-9])/.test(security.next)) errors.next = 'Debe tener al menos un número'
+    else if (!/(?=.*[!@#$%^&*(),.?":{}|<>_\-+=\[\]])/.test(security.next)) errors.next = 'Debe tener al menos un carácter especial'
+    if (security.next !== security.confirm) errors.confirm = 'Las contraseñas no coinciden'
+
+    if (Object.keys(errors).length > 0) {
+      setPasswordErrors(errors)
       return
     }
     try {
@@ -224,6 +238,7 @@ export default function ProfilePage() {
             <label className="font-semibold text-sm uppercase tracking-wider">Dirección</label>
             <input type="text" placeholder="Calle, número, referencia..." value={profileData.address}
               onChange={(e) => setProfileData((p) => ({ ...p, address: e.target.value }))}
+              maxLength={50}
               className="input-field" />
           </div>
           <div className="flex flex-col gap-2.5 mb-4">
@@ -240,18 +255,36 @@ export default function ProfilePage() {
           <form onSubmit={changePassword} className="flex flex-col gap-2.5">
             <div className="flex flex-col gap-1">
               <label className="font-semibold text-sm uppercase tracking-wider">Contraseña actual</label>
-              <input type="password" value={security.current} onChange={(e) => setSecurity((s) => ({ ...s, current: e.target.value }))}
-                className="input-field" />
+              <div className="relative">
+                <input type={showPwd.current ? 'text' : 'password'} value={security.current} onChange={(e) => { setSecurity((s) => ({ ...s, current: e.target.value })); setPasswordErrors((p) => { const c = {...p}; delete c.current; return c }) }} maxLength={20}
+                  className={`input-field w-full ${passwordErrors.current ? 'border-red-500' : ''}`} />
+                <button type="button" onClick={() => setShowPwd((prev) => ({ ...prev, current: !prev.current }))} className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-muted hover:text-accent p-0" aria-label={showPwd.current ? 'Ocultar' : 'Mostrar'}>
+                  {showPwd.current ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
+              {passwordErrors.current && <p className="text-accent text-xs m-0">{passwordErrors.current}</p>}
             </div>
             <div className="flex flex-col gap-1">
               <label className="font-semibold text-sm uppercase tracking-wider">Nueva contraseña</label>
-              <input type="password" value={security.next} onChange={(e) => setSecurity((s) => ({ ...s, next: e.target.value }))}
-                className="input-field" />
+              <div className="relative">
+                <input type={showPwd.next ? 'text' : 'password'} value={security.next} onChange={(e) => { setSecurity((s) => ({ ...s, next: e.target.value })); setPasswordErrors((p) => { const c = {...p}; delete c.next; return c }) }} maxLength={20}
+                  className={`input-field w-full ${passwordErrors.next ? 'border-red-500' : ''}`} />
+                <button type="button" onClick={() => setShowPwd((prev) => ({ ...prev, next: !prev.next }))} className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-muted hover:text-accent p-0" aria-label={showPwd.next ? 'Ocultar' : 'Mostrar'}>
+                  {showPwd.next ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
+              {passwordErrors.next && <p className="text-accent text-xs m-0">{passwordErrors.next}</p>}
             </div>
             <div className="flex flex-col gap-1">
               <label className="font-semibold text-sm uppercase tracking-wider">Confirmar nueva contraseña</label>
-              <input type="password" value={security.confirm} onChange={(e) => setSecurity((s) => ({ ...s, confirm: e.target.value }))}
-                className="input-field" />
+              <div className="relative">
+                <input type={showPwd.confirm ? 'text' : 'password'} value={security.confirm} onChange={(e) => { setSecurity((s) => ({ ...s, confirm: e.target.value })); setPasswordErrors((p) => { const c = {...p}; delete c.confirm; return c }) }} maxLength={20}
+                  className={`input-field w-full ${passwordErrors.confirm ? 'border-red-500' : ''}`} />
+                <button type="button" onClick={() => setShowPwd((prev) => ({ ...prev, confirm: !prev.confirm }))} className="absolute right-3 top-1/2 -translate-y-1/2 bg-transparent border-none cursor-pointer text-muted hover:text-accent p-0" aria-label={showPwd.confirm ? 'Ocultar' : 'Mostrar'}>
+                  {showPwd.confirm ? <FiEyeOff size={18} /> : <FiEye size={18} />}
+                </button>
+              </div>
+              {passwordErrors.confirm && <p className="text-accent text-xs m-0">{passwordErrors.confirm}</p>}
             </div>
             <button type="submit" className="btn-primary self-start">Cambiar contraseña</button>
           </form>
