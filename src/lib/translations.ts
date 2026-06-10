@@ -9,7 +9,7 @@ export const typeMap: Record<string, string> = {
   Metal: 'Metal',
   Fairy: 'Hada',
   Dragon: 'Dragón',
-  Colorless: 'Incoloro',
+  Colorless: 'Común',
 }
 
 export const rarityMap: Record<string, string> = {

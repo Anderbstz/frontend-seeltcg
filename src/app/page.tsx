@@ -65,6 +65,20 @@ const heroSlides = [
   },
 ]
 
+const typeImageMap: Record<string, string> = {
+  Grass: '/tipos/planta.png',
+  Fire: '/tipos/fuego.png',
+  Water: '/tipos/agua.png',
+  Lightning: '/tipos/rayo.png',
+  Psychic: '/tipos/psiquico.png',
+  Fighting: '/tipos/lucha.png',
+  Darkness: '/tipos/siniestro.png',
+  Metal: '/tipos/acero.png',
+  Fairy: '/tipos/hada.png',
+  Dragon: '/tipos/dragon.png',
+  Colorless: '/tipos/comun.png',
+}
+ 
 export default function Home() {
   const [cards, setCards] = useState<any[]>([])
   const [loading, setLoading] = useState(true)
@@ -169,18 +183,11 @@ export default function Home() {
         </aside>
       </section>
 
-      <section className="grid gap-3 px-[5vw] py-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))' }}>
-        {(typeFilters.length
-          ? typeFilters
-          : ['Grass', 'Fire', 'Water', 'Lightning', 'Psychic', 'Fighting', 'Darkness', 'Metal', 'Fairy', 'Dragon', 'Colorless']
-        ).map((label) => (
-          <Link key={label} href={`/search?type=${encodeURIComponent(label)}`} className="no-underline">
-            <button type="button" className="w-full py-3 rounded-full font-semibold uppercase cursor-pointer border-2 border-black transition-colors duration-200 hover:text-white" style={{ background: '#fff1c7' }}
-              onMouseEnter={(e) => { e.currentTarget.style.background = '#d83000'; e.currentTarget.style.color = '#fff' }}
-              onMouseLeave={(e) => { e.currentTarget.style.background = '#fff1c7'; e.currentTarget.style.color = 'inherit' }}
-            >
-              {translateType(label)}
-            </button>
+      <section className="grid gap-4 px-[5vw] py-6" style={{ gridTemplateColumns: 'repeat(auto-fit, minmax(70px, 1fr))' }}>
+        {(typeFilters.length ? typeFilters : ['Grass', 'Fire', 'Water', 'Lightning', 'Psychic', 'Fighting', 'Darkness', 'Metal', 'Fairy', 'Dragon', 'Colorless']).map((label) => (
+          <Link key={label} href={`/search?type=${encodeURIComponent(label)}`} className="flex flex-col items-center gap-1.5 no-underline group">
+            <img src={typeImageMap[label] || '/tipos/comun.png'} alt={translateType(label)} className="w-[60px] h-[60px] rounded-full border-2 border-black object-cover transition-transform duration-200 group-hover:-translate-y-0.5 group-hover:shadow-md" />
+            <span className="text-[11px] font-semibold uppercase text-muted group-hover:text-accent transition-colors duration-200">{translateType(label)}</span>
           </Link>
         ))}
       </section>
