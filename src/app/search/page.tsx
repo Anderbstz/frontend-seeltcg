@@ -148,6 +148,9 @@ function SearchContent() {
 
   return (
     <div className="px-[5vw] py-8 max-w-[1400px] mx-auto">
+      <button type="button" className="btn-outline mb-4" onClick={() => router.back()}>
+        ← Volver
+      </button>
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 mb-8">
         <h1 className="m-0 text-3xl sm:text-4xl">Búsqueda de Cartas</h1>
         <button

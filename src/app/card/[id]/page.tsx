@@ -37,6 +37,13 @@ export default function CardDetailPage() {
     if (card) addToCart(card)
   }
 
+  const handleBuyNow = () => {
+    if (card) {
+      addToCart(card)
+      router.push('/cart')
+    }
+  }
+
   if (loading) {
     return (
       <div className="page-container-md">
@@ -108,13 +115,14 @@ export default function CardDetailPage() {
             <span className="text-3xl font-bold text-accent">{price ?? 'Consultar'}</span>
           </div>
 
-          <button
-            type="button"
-            className="btn-primary-lg"
-            onClick={handleAddToCart}
-          >
-            Añadir al carrito
-          </button>
+          <div className="flex gap-3">
+            <button type="button" className="btn-outline flex-1" onClick={handleAddToCart}>
+              Añadir al carrito
+            </button>
+            <button type="button" className="btn-primary flex-1" onClick={handleBuyNow}>
+              Comprar ahora
+            </button>
+          </div>
 
           {card.attacks && card.attacks.length > 0 && (
             <div className="mt-4 pt-6 border-t-2 border-black">

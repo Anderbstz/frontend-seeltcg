@@ -259,7 +259,7 @@ export default function Navbar() {
           </form>
 
           {showSearchPanel && (
-            <div className="absolute top-full left-0 w-full bg-white border-[3px] border-black rounded-[20px] shadow-[12px_12px_0_#00000025] z-40 p-4 mt-2">
+            <div className="absolute top-full mt-2 left-0 min-w-[280px] sm:min-w-[350px] max-w-[95vw] bg-white border-[3px] border-black rounded-[20px] shadow-[12px_12px_0_#00000025] z-40 p-4">
               {searchLoading && <p className="font-semibold mb-3">Buscando...</p>}
               {searchError && <p className="font-semibold mb-3 text-accent">{searchError}</p>}
               {!searchLoading && !searchError && searchResults.length === 0 && searchTerm.length > 1 && (
