@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react'
 import Link from 'next/link'
+import Skeleton from 'react-loading-skeleton'
 import Card from '@/components/Card'
 import HeroSlide from '@/components/HeroSlide'
 import { translateType } from '@/lib/translations'
@@ -201,7 +202,25 @@ export default function Home() {
           <span className="text-sm text-muted">{cards.length} resultados</span>
         </div>
 
-        {loading && <p className="status-msg">Cargando cartas...</p>}
+        {loading && (
+          <div className="grid-cards mb-8">
+            {Array.from({ length: 8 }).map((_, i) => (
+              <div key={i} className="card overflow-hidden">
+                <div className="p-6 min-h-[260px] flex items-center justify-center bg-card">
+                  <Skeleton circle width={120} height={120} />
+                </div>
+                <div className="p-6 flex flex-col gap-3">
+                  <Skeleton width="60%" height={12} />
+                  <Skeleton width="80%" height={20} />
+                  <Skeleton width="40%" height={16} />
+                </div>
+                <div className="mx-6 mb-6">
+                  <Skeleton width="100%" height={42} borderRadius={18} />
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
         {error && !loading && <p className="status-msg text-accent">{error}</p>}
         {!loading && !error && cards.length === 0 && (
           <p className="status-msg">No encontramos cartas.</p>

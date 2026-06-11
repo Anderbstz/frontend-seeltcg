@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from 'react'
 import { useParams, useRouter } from 'next/navigation'
+import Skeleton from 'react-loading-skeleton'
 import { useCart } from '@/contexts/CartContext'
 import { CARDS_URL } from '@/lib/config'
 import { formatCurrency, getCardImage, getCardPrice, getCardSetName } from '@/utils/cards'
@@ -39,7 +40,22 @@ export default function CardDetailPage() {
   if (loading) {
     return (
       <div className="page-container-md">
-        <p className="status-msg">Cargando carta...</p>
+        <div className="card-lg p-8 grid gap-8 md:grid-cols-2">
+          <div className="flex items-center justify-center rounded-[20px] p-8 bg-card">
+            <Skeleton width={300} height={420} />
+          </div>
+          <div className="flex flex-col gap-6">
+            <Skeleton width="70%" height={32} />
+            <Skeleton width="40%" height={16} />
+            <Skeleton width="50%" height={16} />
+            <Skeleton width="30%" height={16} />
+            <div className="p-6 rounded-[16px] border-2 border-black bg-card">
+              <Skeleton width="80px" height={12} />
+              <Skeleton width="120px" height={32} className="mt-2" />
+            </div>
+            <Skeleton width="100%" height={56} borderRadius={18} />
+          </div>
+        </div>
       </div>
     )
   }

@@ -2,6 +2,7 @@
 
 import { Suspense, useState, useEffect } from 'react'
 import { useSearchParams, useRouter } from 'next/navigation'
+import Skeleton from 'react-loading-skeleton'
 import Card from '@/components/Card'
 import { translateType, translateRarity } from '@/lib/translations'
 import { API_URL } from '@/lib/config'
@@ -221,7 +222,25 @@ function SearchContent() {
         )}
       </form>
 
-      {loading && <p className="status-msg">Buscando cartas...</p>}
+      {loading && (
+        <div className="grid-cards mt-8">
+          {Array.from({ length: 8 }).map((_, i) => (
+            <div key={i} className="card overflow-hidden">
+              <div className="p-6 min-h-[260px] flex items-center justify-center bg-card">
+                <Skeleton circle width={120} height={120} />
+              </div>
+              <div className="p-6 flex flex-col gap-3">
+                <Skeleton width="60%" height={12} />
+                <Skeleton width="80%" height={20} />
+                <Skeleton width="40%" height={16} />
+              </div>
+              <div className="mx-6 mb-6">
+                <Skeleton width="100%" height={42} borderRadius={18} />
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
       {error && !loading && <p className="status-msg text-accent">{error}</p>}
       {!loading && !error && cards.length === 0 && (query || advancedMode) && (
         <p className="status-msg">No se encontraron cartas.</p>
