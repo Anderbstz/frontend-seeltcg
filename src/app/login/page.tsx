@@ -220,11 +220,17 @@ export default function LoginPage() {
             className="btn-primary-lg disabled:opacity-60 disabled:cursor-not-allowed">
             {loading ? 'Procesando...' : isLogin ? 'Iniciar Sesión' : 'Registrarse'}
           </button>
+
+          {isLogin && (
+            <Link href="/forgot-password" className="block text-center text-sm underline mt-2">
+              ¿Olvidaste tu contraseña?
+            </Link>
+          )}
         </form>
 
         <div ref={googleButtonRef} className="mt-4 flex justify-center" />
 
-        <Link href="/" className="block text-center mt-6 font-semibold no-underline text-muted">
+        <Link href="/" className="block text-center mt-4 font-semibold no-underline text-muted">
           ← Volver al inicio
         </Link>
       </div>

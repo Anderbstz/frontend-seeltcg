@@ -23,6 +23,10 @@ export default function ProfilePage() {
   const [statusMsg, setStatusMsg] = useState('')
   const [passwordErrors, setPasswordErrors] = useState<Record<string, string>>({})
   const [showPwd, setShowPwd] = useState({ current: false, next: false, confirm: false })
+  const [showDeleteModal, setShowDeleteModal] = useState(false)
+  const [deletePassword, setDeletePassword] = useState('')
+  const [deleteLoading, setDeleteLoading] = useState(false)
+  const [deleteError, setDeleteError] = useState('')
 
   useEffect(() => {
     try {
@@ -116,7 +120,7 @@ export default function ProfilePage() {
       const res = await fetch(`${AUTH_URL}/change-password/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
-        body: JSON.stringify({ current_password: security.current, new_password: security.next }),
+        body: JSON.stringify({ currentPassword: security.current, newPassword: security.next }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'Error al cambiar contraseña')
@@ -129,22 +133,22 @@ export default function ProfilePage() {
   }
 
   const deleteAccount = async () => {
-    const confirmText = prompt('Escribe DELETE para confirmar eliminación de tu cuenta:')
-    if (!confirmText) return
-    const password = prompt('Ingresa tu contraseña para confirmar:')
-    if (!password) return
+    if (!deletePassword) return
+    setDeleteLoading(true)
+    setDeleteError('')
     try {
       const res = await fetch(`${AUTH_URL}/delete-account/`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
-        body: JSON.stringify({ confirm: confirmText, password }),
+        body: JSON.stringify({ password: deletePassword }),
       })
       const data = await res.json()
       if (!res.ok) throw new Error(data.error || 'No se pudo eliminar la cuenta')
       logout()
       router.push('/')
     } catch (err: any) {
-      setStatusMsg(err.message)
+      setDeleteError(err.message)
+      setDeleteLoading(false)
     }
   }
 
@@ -289,7 +293,32 @@ export default function ProfilePage() {
             <button type="submit" className="btn-primary self-start">Cambiar contraseña</button>
           </form>
           <hr className="my-4 border-t-2 border-black" />
-          <button type="button" className="btn-danger" onClick={deleteAccount}>Eliminar cuenta</button>
+          <button type="button" className="btn-danger" onClick={() => setShowDeleteModal(true)}>Eliminar cuenta</button>
+
+          {/* Modal eliminar cuenta */}
+          {showDeleteModal && (
+            <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50" onClick={() => setShowDeleteModal(false)}>
+              <div className="card p-8 max-w-[420px] w-full mx-4 shadow-xl" onClick={(e) => e.stopPropagation()}>
+                <h3 className="text-xl font-bold m-0 mb-2">Eliminar cuenta</h3>
+                <p className="text-muted mb-4">Esta acción no se puede deshacer. Ingresá tu contraseña para confirmar.</p>
+                {deleteError && (
+                  <div className="mb-4 p-3 rounded-xl font-semibold text-sm border-2" style={{ background: '#ffe6e6', borderColor: '#d83000', color: '#d83000' }}>
+                    {deleteError}
+                  </div>
+                )}
+                <input type="password" value={deletePassword} onChange={(e) => { setDeletePassword(e.target.value); setDeleteError('') }} placeholder="Tu contraseña" maxLength={20}
+                  className="input-field w-full mb-4" />
+                <div className="flex gap-3 justify-end">
+                  <button type="button" className="btn-outline" onClick={() => { setShowDeleteModal(false); setDeletePassword(''); setDeleteError('') }} disabled={deleteLoading}>
+                    Cancelar
+                  </button>
+                  <button type="button" className="btn-danger" onClick={deleteAccount} disabled={!deletePassword || deleteLoading}>
+                    {deleteLoading ? 'Eliminando...' : 'Eliminar cuenta'}
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
         </section>
 
         {/* Payment Method */}
