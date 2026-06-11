@@ -10,7 +10,7 @@ import { formatCurrency, FALLBACK_CARD_IMAGE } from '@/utils/cards'
 function HistoryContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { isAuthenticated, getAuthHeaders } = useAuth()
+  const { auth, isAuthenticated, getAuthHeaders } = useAuth()
   const { clearCart } = useCart()
   const [orders, setOrders] = useState<any[]>([])
   const [loading, setLoading] = useState(false)
@@ -20,8 +20,8 @@ function HistoryContent() {
   const [imgSizeVar, setImgSizeVar] = useState('140px')
 
   useEffect(() => {
+    if (!auth?.token) return
     const loadHistory = async () => {
-      if (!isAuthenticated()) return
       setLoading(true)
       setError('')
       try {
@@ -49,7 +49,7 @@ function HistoryContent() {
     }
     loadHistory()
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [])
+  }, [auth])
 
   // If coming from a successful payment, clear local cart and show banner
   useEffect(() => {
