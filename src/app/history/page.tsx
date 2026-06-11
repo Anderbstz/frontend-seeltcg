@@ -75,7 +75,7 @@ function HistoryContent() {
       }
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams])
+  }, [searchParams, auth])
 
   // Read image size preference
   useEffect(() => {
@@ -92,9 +92,9 @@ function HistoryContent() {
     const created = order.created_at ? new Date(order.created_at) : null
 
     if (q) {
-      const hasMatch = (order.items || []).some((it: any) =>
-        (it.product_name || '').toLowerCase().includes(q),
-      )
+        const hasMatch = (order.items || []).some((it: any) =>
+          ((it.productName || it.product_name) || '').toLowerCase().includes(q),
+        )
       if (!hasMatch) return false
     }
     if (filters.minTotal) {
@@ -211,12 +211,12 @@ function HistoryContent() {
                 </div>
                 <div className="flex flex-col gap-2 mt-3">
                   {(order.items || []).map((item: any) => (
-                    <div key={`${order.id}-${item.product_id}-${item.product_name}`} className="grid items-center gap-4" style={{ gridTemplateColumns: 'var(--history-img-size, 140px) 1fr auto' }}>
+                    <div key={`${order.id}-${item.productId || item.product_id}-${item.productName || item.product_name}`} className="grid items-center gap-4" style={{ gridTemplateColumns: 'var(--history-img-size, 140px) 1fr auto' }}>
                       <div className="rounded-xl flex items-center justify-center overflow-hidden" style={{ width: 'var(--history-img-size, 140px)', height: 'var(--history-img-size, 140px)', background: '#fef7e7' }}>
-                        <img src={item.product_image || FALLBACK_CARD_IMAGE} alt={item.product_name} className="w-full h-full object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.15)]" />
+                        <img src={(item.productImage || item.product_image) || FALLBACK_CARD_IMAGE} alt={item.productName || item.product_name} className="w-full h-full object-contain drop-shadow-[0_8px_18px_rgba(0,0,0,0.15)]" />
                       </div>
                       <div className="flex gap-2 items-baseline">
-                        <strong>{item.product_name}</strong>
+                        <strong>{item.productName || item.product_name}</strong>
                         <span className="text-sm text-muted">Cantidad: {item.quantity}</span>
                       </div>
                       <div className="font-semibold">{formatCurrency(item.price)}</div>

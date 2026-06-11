@@ -48,19 +48,25 @@ export default function CartPage() {
     setError('')
 
     try {
-      // Sync cart with backend
+      // Sync cart with backend: limpia el backend y agrega las cartas del frontend
       try {
+        // Obtener items actuales del backend para eliminarlos
         const res = await fetch(`${API_URL}/cart/`, { headers: { ...getAuthHeaders() } })
-        const serverItems = res.ok ? await res.json() : []
-        if ((!Array.isArray(serverItems) || serverItems.length === 0) && cart.length > 0) {
-          for (const item of cart) {
-            for (let i = 0; i < item.qty; i++) {
-              await fetch(`${API_URL}/cart/add/`, {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
-                body: JSON.stringify({ card_id: item.id }),
-              })
-            }
+        if (res.ok) {
+          const serverItems = await res.json()
+          // Eliminar todos los items del backend
+          for (const item of serverItems) {
+            await fetch(`${API_URL}/cart/remove/${item.id}/`, { method: 'DELETE', headers: { ...getAuthHeaders() } })
+          }
+        }
+        // Agregar todos los items del frontend al backend
+        for (const item of cart) {
+          for (let i = 0; i < item.qty; i++) {
+            await fetch(`${API_URL}/cart/add/`, {
+              method: 'POST',
+              headers: { 'Content-Type': 'application/json', ...getAuthHeaders() },
+              body: JSON.stringify({ card_id: item.id }),
+            })
           }
         }
       } catch (syncError) {
