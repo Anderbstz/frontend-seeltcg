@@ -53,7 +53,7 @@ function HistoryContent() {
 
   // If coming from a successful payment, clear local cart and show banner
   useEffect(() => {
-    if (searchParams.get('success') && isAuthenticated()) {
+    if (searchParams.get('success') && auth?.token) {
       clearCart()
       const t = setTimeout(() => setShowSuccessBanner(false), 6000)
       const interval = setInterval(async () => {
